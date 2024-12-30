@@ -10,6 +10,7 @@ module.exports = () => ({
         save: jest.fn((callback) => callback(null)),
         destroy: jest.fn((callback) => {
           mockedSessionData = {};
+          req.session = {};
           callback(null);
         }),
         regenerate: jest.fn((callback) => callback(null)),
