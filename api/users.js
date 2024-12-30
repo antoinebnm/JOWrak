@@ -65,6 +65,8 @@ api.post("/users/:action/:id/:attribute?/:value?", async (req, res, next) => {
         if (req.params.id == "all") {
           const users = await User.find(); // Trouve les users
           res.status(200).json(users);
+        } else if (await User.findOne({ _id: req.params.id })) {
+          res.status(200).json(await User.findOne({ _id: req.params.id }));
         } else {
           const user = await User.findOne({
             "credentials.login": req.params.id,

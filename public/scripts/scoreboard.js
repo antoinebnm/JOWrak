@@ -4,9 +4,8 @@ let thead = document.querySelector("thead");
 var header = `
     <tr>
         <th>Name</th>
-        <th>Played</th>
         <th>Score</th>
-        <th>Duration</th>
+        <th>Date of entry</th>
     </tr>
     `;
 thead.innerHTML = header;
@@ -21,7 +20,6 @@ function updateTable(players, gameType) {
               <td>${element.displayName}</td>
               <td>${new Date(game.dateOfEntry).toLocaleDateString()}</td>
               <td>${game.score}</td>
-              <td>${game.time}</td>
           </tr>`;
       }
     });

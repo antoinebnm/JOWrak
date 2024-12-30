@@ -143,6 +143,9 @@ authForm.addEventListener("submit", async (event) => {
     );
     if (data?.message == "Response status: 401") {
       throw new Error("Invalid credentials !");
+    } else if (data?.message == "Response status: 500") {
+      alert("A user with this name already exist !");
+      throw new Error("Unique user login required !");
     }
     if (data?.userInfo) {
       toggleUserProfil(data.userInfo.displayName);
