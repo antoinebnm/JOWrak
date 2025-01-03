@@ -5,64 +5,10 @@ const Game = require("../models/Game");
 const jwtSignCheck = require("../middlewares/jwtsigncheck");
 require("dotenv").config();
 
-api.post("/users/:action/:id/:attribute?/:value?", async (req, res, next) => {
-  switch (req.params.action) {
-    case "update": //id here is the DB id / user token
-      try {
-        switch (req.params.attribute) {
-          case "displayName":
-            await User.updateOne(
-              { _id: req.params.id },
-              {
-                $set: { displayName: req.params.value },
-              }
-            );
-            break;
-
-          case "password":
-            await User.updateOne(
-              { _id: req.params.id },
-              {
-                $set: { password: req.params.value },
-              }
-            );
-            break;
-
-          case "games":
-            let gamesHistory = await User.findOne({
-              _id: req.params.id,
-            }).get("gamesPlayed");
-            const newGame = await Game.findById(req.params.value);
-            gamesHistory.push(newGame);
-            await User.updateOne(
-              { _id: req.params.id },
-              {
-                $set: { gamesPlayed: gamesHistory },
-              }
-            );
-            break;
-
-          default:
-            next();
-            break;
-        }
-      } catch {
-        res.status(400).json({ error: "Bad request" });
-      }
-      break;
-
-    case "delete": //id here is the DB id / user token
-      try {
-        await User.deleteOne({ _id: req.params.id });
-        res.status(200).redirect("/");
-      } catch (error) {
-        res.status(500).json({ error: "Error when retrieving data" });
-      }
-      break;
-
-    default:
-      break;
-  }
+api.use("/users", async (req, res, next) => {
+  // protected route, is exe admin ?
+  // no tests for now / todo: tests
+  next();
 });
 
 api.post("/users/read/:id", async (req, res, next) => {
@@ -91,20 +37,27 @@ api.post("/users/read/:id", async (req, res, next) => {
 
 api.post("/users/update", async (req, res, next) => {
   try {
-    const { userLogin, OAuthToken, param, newValue } = req.body;
+    const userId = req.headers.userId;
+    const setting = req.headers.setting;
+    const changedValue = req.headers.changedValue;
 
-    const verifyToken = jwtSignCheck({ OAuthToken: OAuthToken }, res);
-    if (!verifyToken) {
-      throw new Error("Token verification failed");
-    }
-
-    if (param == "gamesPlayed") {
-      throw new Error("Games update unsupported for now.");
+    if (setting == "gamesPlayed") {
+      let gamesHistory = await User.findOne({
+        _id: userId,
+      }).get("gamesPlayed");
+      const newGame = await Game.findById(changedValue);
+      gamesHistory.push(newGame);
+      await User.updateOne(
+        { _id: userId },
+        {
+          $set: { gamesPlayed: gamesHistory },
+        }
+      );
     }
 
     await User.findOneAndUpdate(
-      { "credentials.login": userLogin },
-      { [param]: newValue },
+      { _id: userId },
+      { [setting]: changedValue },
       { returnOriginal: false }
     ).then(() => {
       res.status(200).json({ message: "User document updated" });
@@ -112,6 +65,17 @@ api.post("/users/update", async (req, res, next) => {
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ error: "Bad request" });
+  }
+});
+
+api.post("/users/delete", async (req, res, next) => {
+  try {
+    await User.deleteOne({ _id: req.params.id });
+    res.status(200).json({
+      message: `User (id number ${req.params.id}) successfully deleted.`,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error when retrieving data" });
   }
 });
 
