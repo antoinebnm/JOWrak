@@ -18,8 +18,8 @@ function updateTable(players, gameType) {
         row += `
           <tr>
               <td>${element.displayName}</td>
-              <td>${new Date(game.dateOfEntry).toLocaleDateString()}</td>
               <td>${game.score}</td>
+              <td>${new Date(game.dateOfEntry).toLocaleDateString()}</td>
           </tr>`;
       }
     });
@@ -29,5 +29,6 @@ function updateTable(players, gameType) {
 
 // Appelle la fonction pour récupérer les données et mettre à jour le tableau (à chaque chargement de la page scoreboard)
 fetchData("api/users/read/all").then((data) => {
+  console.log(data);
   updateTable(data, "chrono"); // Json to array
 });

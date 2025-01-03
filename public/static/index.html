@@ -62,20 +62,21 @@
           </form>
         </div>
       </div>
-      <div class="game-box">
+      <div class="main-box">
         <h2 class="title">Typing Speed Game</h2>
-        <button id="startGameButton" onclick="run()" class="btn">
-          Start Game
-        </button>
-        <!-- Nouveau bouton pour accéder au leaderboard -->
-        <button onclick="window.location.href='scoreboard'" class="btn">
-          View Leaderboard
-        </button>
+        <div class="all_btn">
+          <button id="startGameButton" onclick="run()" class="btn">
+            Start Game
+          </button>
+          <button onclick="window.location.href='scoreboard'" class="btn">
+            View Leaderboard
+          </button>
+        </div>
         <section class="game-info">
-          <p>Time Remaining: <span id="time"></span> second(s)</p>
+          <p><span id="time">(Waiting for the game to start)</span></p>
           <p>
-            Word to Type: <span id="wordToType">Ready?</span><br />
-            Score: <span id="scoreDiv">0</span> point(s)
+            <span id="wordToType"></span><br />
+            Score: <span id="scoreDiv">0</span>
           </p>
           <div class="input-container">
             <label id="label" for="zoneToType">Type here:</label>

@@ -60,31 +60,32 @@ api.post("/users/:action/:id/:attribute?/:value?", async (req, res, next) => {
       }
       break;
 
-    case "read":
-      try {
-        if (req.params.id == "all") {
-          const users = await User.find(); // Trouve les users
-          res.status(200).json(users);
-        } else if (await User.findOne({ _id: req.params.id })) {
-          res.status(200).json(await User.findOne({ _id: req.params.id }));
-        } else {
-          const user = await User.findOne({
-            "credentials.login": req.params.id,
-          });
-          if (req.params.attribute === undefined) {
-            res.status(400).json({ error: "Bad request" });
-          } else if (user.credentials.password == req.params.attribute) {
-            res.status(200).json(user._id);
-          } else {
-            res.status(401).json({ error: "Unauthorized" });
-          }
-        }
-      } catch (error) {
-        res.status(500).json({ error: "Error when retrieving data" });
-      }
-
     default:
       break;
+  }
+});
+
+api.post("/users/read/:id", async (req, res, next) => {
+  try {
+    if (req.params.id == "all") {
+      const users = await User.find(); // Trouve les users
+      res.status(200).json(users);
+    } else if (await User.findOne({ _id: req.params.id })) {
+      res.status(200).json(await User.findOne({ _id: req.params.id }));
+    } else {
+      const user = await User.findOne({
+        "credentials.login": req.params.id,
+      });
+      if (req.params.attribute === undefined) {
+        res.status(400).json({ error: "Bad request" });
+      } else if (user.credentials.password == req.params.attribute) {
+        res.status(200).json(user._id);
+      } else {
+        res.status(401).json({ error: "Unauthorized" });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error when retrieving data" });
   }
 });
 

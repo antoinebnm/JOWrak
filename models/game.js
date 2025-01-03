@@ -8,7 +8,7 @@ const gameSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["infinite", "chrono", "words"],
+      enum: ["infinite", "chrono", "words"], // infinite: by mistake made / chrono: by time passed / words: by words typed
     },
     score: { type: Number, required: true },
     playedAt: { type: Date, required: true },
