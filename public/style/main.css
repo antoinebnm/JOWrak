@@ -31,42 +31,34 @@ body {
 
 /* Style pour le menu */
 #accountMenu {
-  display: inline-flex;
+  display: flex;
+  width: 12.8125rem;
+  flex-direction: column;
+  align-items: center;
+
   position: absolute;
   top: 24px;
   right: 16px;
   cursor: pointer;
 }
 
-#userProfil {
-  position: relative;
-  margin-right: 2em;
+#accountMenu #userProfil {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+
+  color: #fff;
+  text-align: center;
+  font-size: 1.25rem;
 }
 
 .dropdown-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: #fff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  z-index: 1;
-}
+  /* Ne pas utiliser display: none, car cela empêche les transitions */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-.dropdown-menu button {
-  display: block;
-  text-decoration: none;
-  color: #333;
-}
-
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
-  border-radius: 4px;
-}
-
-.dropdown-menu {
-  display: block; /* Ne pas utiliser display: none, car cela empêche les transitions */
   opacity: 0;
   transform: translateY(
     -10px
@@ -155,9 +147,6 @@ body {
   border-radius: 0.3125rem;
   background: var(--Electric-Blue, #007bff);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-
-  margin: 1rem 0;
-  margin-left: 0.5rem;
 }
 
 .btn:hover {
@@ -179,14 +168,37 @@ body {
   box-shadow: none;
 }
 
+.dropdown-menu .btn {
+  display: flex;
+  padding: 1rem 2rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+  align-self: stretch;
+
+  background: var(--Pure-White, #fff);
+  color: var(--Dark-Gray, #333);
+  text-align: center;
+  font-size: 1.25rem;
+
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+}
+
+.dropdown-menu .btn:hover {
+  background: var(--Pale-Blue, #d6eaff);
+}
+
 /*
         Auth
 */
 /* Style pour les boutons d'authentification */
 .auth-buttons {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 2rem;
+  right: 6%;
 }
 
 .auth-buttons .btn {
