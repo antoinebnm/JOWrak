@@ -7,5 +7,57 @@
 }
 
 .input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
   margin-top: 1rem;
+}
+
+.input-container #zoneToType {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  user-select: none;
+  overflow: hidden;
+  outline: none;
+
+  min-width: 16rem;
+  width: auto;
+  min-height: 2rem;
+  height: fit-content;
+
+  background-color: #d6eaff;
+  border: none;
+  border-radius: 0.4rem;
+
+  padding: 1rem;
+  line-height: 1.6;
+  cursor: text;
+}
+
+.input-container #zoneToType:hover {
+  background-color: #bcdcff;
+}
+
+.input-container #zoneToType:focus {
+  background-color: #bcdcff;
+}
+
+.input-container #zoneToType:focus span.current {
+  border-left: 2px solid black;
+  margin-left: -2px;
+  animation: 1s ease 0s infinite normal none running cursorBlink;
+}
+
+@keyframes cursorBlink {
+  0%,
+  50% {
+    border-left: 2px solid black;
+  }
+  51%,
+  100% {
+    border-left: 2px solid transparent;
+  }
 }

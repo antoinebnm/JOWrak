@@ -251,6 +251,10 @@ input {
   margin: 0.2rem 0;
 }
 
+#pwdEye {
+  margin-left: -1rem;
+}
+
 .wrong {
   border: 1px solid #dd1919;
   animation: horizontal-shaking 0.3s ease-in-out;
