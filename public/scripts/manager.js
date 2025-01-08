@@ -14,6 +14,8 @@ const switchAuth = document.getElementById("switchAuth");
 
 const accLogout = document.getElementById("accLogout");
 
+const pwdEye = document.getElementById("pwdEye");
+
 const fields = {
   usernameField: document.getElementById("username"),
   displaynameField: document.getElementById("displayname"),
@@ -95,10 +97,27 @@ function closePopup() {
   authPopup.style.display = "none";
 }
 
+function togglePwdVisibility() {
+  if (PwdVisibility) {
+    PwdVisibility = false;
+    pwdEye.textContent = "Ø";
+    fields.passwordField["type"] = "password";
+    fields.confirmpwdField["type"] = "password";
+  } else {
+    PwdVisibility = true;
+    pwdEye.textContent = "O";
+    fields.passwordField["type"] = "text";
+    fields.confirmpwdField["type"] = "text";
+  }
+}
+
 // Événements pour ouvrir et fermer le popup
 loginButton.addEventListener("click", () => openPopup("login"));
 registerButton.addEventListener("click", () => openPopup("register"));
 closeBtn.addEventListener("click", closePopup);
+
+let PwdVisibility = false;
+pwdEye.addEventListener("click", () => togglePwdVisibility());
 
 accLogout.addEventListener("click", () => {
   fetchData("/api/auth/logout").then(() => {

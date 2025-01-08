@@ -19,7 +19,7 @@ function shuffleWords(array) {
   return array;
 }
 
-function run() {
+function run(timeLimit = 10) {
   const wordToType = document.getElementById("wordToType");
   const zoneToType = document.getElementById("zoneToType");
 
@@ -27,7 +27,7 @@ function run() {
   const timeDiv = document.getElementById("time");
   const startButton = document.getElementById("startGameButton");
 
-  let _x = 10;
+  let _x = 100;
 
   const ranNums = shuffleWords(
     Array.from({ length: _x }, () => Math.floor(Math.random() * 1372))
@@ -42,8 +42,7 @@ function run() {
   document.getElementById("label").textContent = "Type here:";
   zoneToType.focus();
 
-  const timeLimit = 10000;
-  let timeRemaining = timeLimit / 1000;
+  let timeRemaining = timeLimit;
   timeDiv.textContent = timeRemaining;
 
   startButton.hidden = true;
@@ -57,14 +56,15 @@ function run() {
   const timeout = setTimeout(() => {
     console.log("Timeout");
     zoneToType.hidden = true;
-    document.getElementById("label").textContent = "Game Ended !";
+    document.getElementById("label").textContent = "";
     clearTimeout(timeout); // Arrêter le timer
     clearInterval(interval); // Arrêter la mise à jour du temps
     scoreDiv.textContent = userScore;
 
     startButton.textContent = "Play Again ?";
     startButton.hidden = false;
-  }, timeLimit);
+    timeDiv.textContent = "Game Ended !";
+  }, timeLimit * 1000);
 
   zoneToType.addEventListener("input", () => {
     userInput = zoneToType.value;

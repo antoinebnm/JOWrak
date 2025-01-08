@@ -9,6 +9,7 @@
     <script src="../scripts/manager.js" defer></script>
     <script src="../scripts/index.js" defer></script>
     <link href="../style/main.css" rel="stylesheet" />
+    <link href="../style/game.css" rel="stylesheet" />
     <link href="../src/js.ico" rel="icon" />
   </head>
   <body>
@@ -63,7 +64,7 @@
               placeholder="Password"
               autocomplete="current-password"
               required
-            />
+            /><button type="button" class="pwdEye" id="pwdEye">Ø</button>
             <input
               type="password"
               id="confirmpwd"
@@ -79,7 +80,7 @@
       <div class="main-box">
         <h2 class="title">Typing Speed Game</h2>
         <div class="all_btn">
-          <button id="startGameButton" onclick="run()" class="btn">
+          <button id="startGameButton" onclick="run(60)" class="btn">
             Start Game
           </button>
           <button onclick="window.location.href='scoreboard'" class="btn">
@@ -94,15 +95,7 @@
           </p>
           <div class="input-container">
             <label id="label" for="zoneToType">Type here:</label>
-            <input
-              type="text"
-              id="zoneToType"
-              name="zoneToType"
-              required
-              minlength="4"
-              maxlength="7"
-              size="10"
-            />
+            <input type="text" id="zoneToType" name="zoneToType" required />
           </div>
         </section>
       </div>

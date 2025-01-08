@@ -240,23 +240,15 @@ body {
   cursor: pointer;
 }
 
-/*
-        Main container
-*/
-.game-info p {
-  margin: 1rem 0;
-  font-size: 1.25rem;
-}
-
-.input-container {
-  margin-top: 1rem;
-}
-
 input {
   padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+#authForm input {
+  margin: 0.2rem 0;
 }
 
 .wrong {

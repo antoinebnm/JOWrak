@@ -1,0 +1,11 @@
+/*
+        Main container
+*/
+.game-info p {
+  margin: 1rem 0;
+  font-size: 1.25rem;
+}
+
+.input-container {
+  margin-top: 1rem;
+}
