@@ -28,7 +28,9 @@ function updateTable(players, gameType) {
 }
 
 // Appelle la fonction pour récupérer les données et mettre à jour le tableau (à chaque chargement de la page scoreboard)
-fetchData("api/users/read/all").then((data) => {
-  console.log(data);
-  updateTable(data, "chrono"); // Json to array
+fetchData("api/users/read/all").then((users) => {
+  let TCid = "0".repeat(24);
+  users = users.filter((user) => user._id != TCid);
+  console.log(users);
+  updateTable(users, "chrono"); // Json to array
 });
