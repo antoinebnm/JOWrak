@@ -7,7 +7,7 @@ const userSchema = new Schema(
     displayName: {
       type: String,
       required: true,
-      minLength: 1,
+      minLength: 4,
       maxLength: 20,
     },
     credentials: {
@@ -15,7 +15,7 @@ const userSchema = new Schema(
       password: { type: String, required: true },
     },
     addedAt: { type: Date, required: true },
-    gamesPlayed: { type: Schema.Types.Mixed, required: true },
+    gamesPlayed: [{ type: Schema.Types.ObjectId, ref: "Game" }],
   },
   { versionKey: false }
 );

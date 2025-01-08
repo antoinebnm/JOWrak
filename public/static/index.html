@@ -43,18 +43,32 @@
           <span class="close-btn">&times;</span>
           <h2 id="authTitle">Login</h2>
           <form id="authForm">
-            <input type="text" id="username" placeholder="Login" required />
-            <input type="text" id="displayname" placeholder="Username" hidden />
+            <input
+              type="text"
+              id="username"
+              placeholder="Login"
+              autocomplete="username"
+              required
+            />
+            <input
+              type="text"
+              id="displayname"
+              placeholder="Username"
+              autocomplete="username"
+              hidden
+            />
             <input
               type="password"
               id="password"
               placeholder="Password"
+              autocomplete="current-password"
               required
             />
             <input
               type="password"
               id="confirmpwd"
               placeholder="Confirm Password"
+              autocomplete="new-password"
               hidden
             />
             <input type="submit" class="btn" value="Submit" />

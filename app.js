@@ -68,8 +68,11 @@ app.use((req, res, next) => {
 const router = require("./public/router/routes");
 app.use("/", router);
 
-const api = require("./api/users");
-app.use("/api", api);
+const apiUser = require("./api/users");
+app.use("/api", apiUser);
+
+const apiGames = require("./api/games");
+app.use("/api", apiGames);
 
 const auth = require("./api/auth");
 app.use("/api/auth", auth);

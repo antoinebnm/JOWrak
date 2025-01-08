@@ -2,7 +2,6 @@ const express = require("express");
 const api = express.Router();
 const User = require("../models/User");
 const Game = require("../models/Game");
-const jwtSignCheck = require("../middlewares/jwtsigncheck");
 require("dotenv").config();
 
 api.use("/users", async (req, res, next) => {
@@ -68,32 +67,13 @@ api.post("/users/update", async (req, res, next) => {
   }
 });
 
-api.post("/users/delete", async (req, res, next) => {
+api.post("/users/delete/:id", async (req, res, next) => {
   try {
-    await User.deleteOne({ _id: req.params.id });
-    res.status(200).json({
-      message: `User (id number ${req.params.id}) successfully deleted.`,
+    await User.findOneAndDelete({ _id: req.params.id }).then((user) => {
+      res.status(200).json({
+        message: `User (id: ${user._id} | name: ${user.displayName}) successfully deleted.`,
+      });
     });
-  } catch (error) {
-    res.status(500).json({ error: "Error when retrieving data" });
-  }
-});
-
-// API for user score fetch
-api.use("/users/scoreboard/:gameType?/:filtre?", async (req, res, next) => {
-  const gameType = req.params.gameType || "chrono";
-  const filter = req.params.filtre || "reverse";
-  console.log(`Game: ${gameType} | Filter: ${filter}`);
-  try {
-    switch (filter) {
-      case "reverse":
-        //users.sort({ userScore: -1 });
-        break;
-
-      default:
-        break;
-    }
-    //res.json(users); // Renvoie les utilisateurs en format JSON
   } catch (error) {
     res.status(500).json({ error: "Error when retrieving data" });
   }
