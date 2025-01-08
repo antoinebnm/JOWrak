@@ -85,6 +85,10 @@ api.post("/games/read/:id", async (req, res, next) => {
   }
 });
 
+api.post("/games/update/:id", async (req, res, next) => {
+  res.status(200);
+});
+
 api.post("/games/delete/:id", async (req, res, next) => {
   try {
     // Find and delete the game

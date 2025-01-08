@@ -1,5 +1,6 @@
 const express = require("express");
 const api = express.Router();
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const Game = require("../models/Game");
 require("dotenv").config();
@@ -8,6 +9,33 @@ api.use("/users", async (req, res, next) => {
   // protected route, is exe admin ?
   // no tests for now / todo: tests
   next();
+});
+
+api.post("/users/create", async (req, res, next) => {
+  try {
+    console.log("CREATE " + req.headers);
+    const login = req.headers.login;
+    const password = req.headers.password;
+    const username = req.headers.displayname;
+
+    if (!login || !password || !username) {
+      throw new Error("Missing Authenticate Header");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      displayName: username,
+      credentials: { login: login, password: hashedPassword },
+      addedAt: new Date(),
+      gamesPlayed: [],
+    });
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 api.post("/users/read/:id", async (req, res, next) => {

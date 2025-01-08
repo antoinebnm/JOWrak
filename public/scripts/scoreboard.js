@@ -32,5 +32,5 @@ fetchData("api/users/read/all").then((users) => {
   let TCid = "0".repeat(24);
   users = users.filter((user) => user._id != TCid);
   console.log(users);
-  updateTable(users, "chrono"); // Json to array
+  updateTable(users, "typeSpeed"); // Json to array
 });

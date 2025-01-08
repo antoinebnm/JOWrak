@@ -6,28 +6,18 @@ const jwt = require("jsonwebtoken");
 const jwtSignCheck = require("../middlewares/jwtsigncheck");
 const requireAuth = require("../middlewares/requireAuth");
 const getHeader = require("../middlewares/getHeader");
+const fetchData = require("../middlewares/fetchData");
 require("dotenv").config();
 
 // User registration
 auth.post("/register", async (req, res) => {
+  console.log("REGiSTER " + req.headers);
   try {
-    const login = req.headers.login; // Retreive info on login
-    const password = req.headers.password; // Retreive info on password
-    const username = req.headers.displayname;
-
-    if (!login || !password || !username) {
-      throw new Error("No Authenticate Header");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({
-      displayName: username,
-      credentials: { login: login, password: hashedPassword },
-      addedAt: new Date(),
-      gamesPlayed: [],
+    let user = await fetchData(req, "/api/users/create", undefined, undefined, {
+      Login: req.headers.login,
+      Password: req.headers.password,
+      DisplayName: req.headers.displayname,
     });
-
-    await user.save();
 
     //userId => Payload res
     const OAuthToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {

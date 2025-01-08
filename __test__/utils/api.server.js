@@ -15,13 +15,14 @@ const createServer = async () => {
       httpOnly: false,
       secure: false, // mettre à `true` en production si HTTPS est utilisé
     }, // miliseconds * seconds * minutes * hour
-  })
+  });
 
   app.use(compression());
   app.use(express.json());
   app.use(sessionManager.create());
   app.use("/api/auth", require("../../api/auth"));
-  app.use("/api/users", require("../../api/users"));
+  app.use("/api", require("../../api/games"));
+  app.use("/api", require("../../api/users"));
 
   const PORT = process.env.TEST_PORT || 0;
   const server = app.listen(PORT);
