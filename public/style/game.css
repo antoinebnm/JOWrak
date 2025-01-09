@@ -16,15 +16,14 @@
 
 .input-container #zoneToType {
   display: flex;
-  justify-content: center;
   text-align: center;
 
   user-select: none;
   overflow: hidden;
   outline: none;
 
-  min-width: 16rem;
   width: auto;
+  max-width: 24rem;
   min-height: 2rem;
   height: fit-content;
 
@@ -53,6 +52,10 @@
 #zoneToType span.correct {
   background: rgba(35, 222, 35, 0.5);
   color: #333;
+}
+
+.input-container #zoneToType span {
+  position: relative;
 }
 
 .input-container #zoneToType:focus span.current {
