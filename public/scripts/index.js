@@ -1,5 +1,8 @@
 // formatage
 const zoneToType = document.getElementById("zoneToType");
+const scoreDiv = document.getElementById("scoreDiv");
+const timeDiv = document.getElementById("time");
+const startButton = document.getElementById("startGameButton");
 
 let totalOffset = 0;
 function offsetChildren(parent, target, offset) {
@@ -26,42 +29,6 @@ function shuffleWords(array) {
   return array;
 }
 
-function run(timeLimit = 10) {
-  const scoreDiv = document.getElementById("scoreDiv");
-  const timeDiv = document.getElementById("time");
-  const startButton = document.getElementById("startGameButton");
-
-  let userScore = 0;
-
-  zoneToType.value = "";
-  zoneToType.hidden = false;
-  document.getElementById("label").textContent = "Type here:";
-  zoneToType.focus();
-
-  let timeRemaining = timeLimit;
-  timeDiv.textContent = timeRemaining;
-
-  startButton.hidden = true;
-
-  const interval = setInterval(() => {
-    timeRemaining--;
-    timeDiv.textContent = timeRemaining;
-  }, 1000);
-
-  const timeout = setTimeout(() => {
-    console.log("Timeout");
-    zoneToType.hidden = true;
-    document.getElementById("label").textContent = "";
-    clearTimeout(timeout); // Arrêter le timer
-    clearInterval(interval); // Arrêter la mise à jour du temps
-    scoreDiv.textContent = userScore;
-
-    startButton.textContent = "Play Again ?";
-    startButton.hidden = false;
-    timeDiv.textContent = "Game Ended !";
-  }, timeLimit * 1000);
-}
-
 function setWords(list) {
   let html = ``;
   list.forEach((word) => {
@@ -69,7 +36,8 @@ function setWords(list) {
       html += `<span class="">${char}</span>
 `;
     });
-    html += `<span class="">&nbsp;</span>
+    if (list.indexOf(word) != list.length - 1)
+      html += `<span class="">&nbsp;</span>
 `;
   });
   return html;
@@ -79,9 +47,40 @@ function checkChar(char, key) {
   return char === key;
 }
 
-let _x = 10;
+function round(x, n) {
+  return (
+    Math.round((x + Number.EPSILON) * parseInt("1" + "0".repeat(n))) /
+    parseInt("1" + "0".repeat(n))
+  );
+}
+
+// TODO: Define Net WPM, Gross WPM, Accurate Accuracy (no corrected mistakes)
+function getWPM(numOfChar, timeTaken) {
+  // 7chars words + space, timeTaken in seconds
+  //numOfChar -= 1;
+  numOfChar /= 8; // characters to words
+  if (timeTaken == 0) timeTaken = 1;
+  timeTaken /= 60; // seconds to minutes
+  return round(numOfChar / timeTaken, 2);
+}
+
+function getScore(wpm, accuracy) {
+  return round(wpm * accuracy, 2);
+}
+
+function getAccuracy(parent, target, options) {
+  let correct = 0;
+  let counter = 0;
+  parent.querySelectorAll(target).forEach((el) => {
+    if (options.includes(el.className)) counter += 1;
+    if (el.className == "correct") correct += 1;
+  });
+  return { total: counter, correct: correct };
+}
+
+let numOfWords = 10;
 const ranNums = shuffleWords(
-  Array.from({ length: _x }, () => Math.floor(Math.random() * 1372))
+  Array.from({ length: numOfWords }, () => Math.floor(Math.random() * 1372))
 );
 
 zoneToType.innerHTML = setWords(ranNums);
@@ -89,8 +88,37 @@ zoneToType.firstChild.classList = "current";
 
 offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
 
-zoneToType.focus();
+let interval;
+let timeSpent = 0;
+let accuracy = 1;
+let gameStarted = null;
+let filledCharacters;
+
+function run(timeLimit = null) {
+  gameStarted = true;
+  startButton.hidden = true;
+  if (!timeLimit) timeDiv.textContent = "Partie en cours...";
+
+  zoneToType.value = "";
+  zoneToType.hidden = false;
+  zoneToType.focus();
+
+  interval = setInterval(() => {
+    timeSpent++;
+    filledCharacters = getAccuracy(zoneToType, "span", [
+      "correct",
+      "incorrect",
+    ]);
+    let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
+    scoreDiv.textContent = getScore(
+      getWPM(filledCharacters.total, timeSpent),
+      accuracy
+    );
+  }, 1000);
+}
+
 zoneToType.addEventListener("keydown", function (event) {
+  if (!gameStarted) return;
   let key;
   key = event.key; // The actual key pressed
   if (key == " ") key = "&nbsp;";
@@ -132,6 +160,16 @@ zoneToType.addEventListener("keydown", function (event) {
       currentChar.classList.add("incorrect");
     }
     offsetChildren(zoneToType, "span", -currentChar.offsetWidth);
+    if (!currentChar.nextElementSibling) {
+      gameStarted = false;
+      clearInterval(interval); // Arrêter la mise à jour du temps
+      //zoneToType.hidden = true;
+
+      startButton.textContent = "Rejouer ?";
+      startButton.hidden = false;
+      timeDiv.textContent = "Partie terminée !";
+      return;
+    }
     currentChar.nextElementSibling.classList.add("current");
   }
 });

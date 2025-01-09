@@ -13,12 +13,17 @@ body {
 
 /* Style pour la banniere */
 .banner {
+  display: flex;
   background-color: #333;
   color: #fff;
   text-align: center;
   align-items: center;
-  justify-content: space-between; /* espace entre les éléments */
+  justify-content: center;
   padding: 1rem 20px;
+}
+
+header.banner {
+  height: 6rem;
 }
 
 .banner #homeButton {
@@ -114,7 +119,7 @@ body {
   gap: 0.5rem;
 }
 
-.title {
+.section-title {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
@@ -201,7 +206,6 @@ body {
 /* Style pour les boutons d'authentification */
 .auth-buttons {
   position: absolute;
-  top: 2rem;
   right: 6%;
 }
 

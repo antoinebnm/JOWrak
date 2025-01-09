@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JOWman Benchmark — 7 letters' words Speed Typing Game</title>
+    <title>JOW Games — 7 letters' words Speed Typing Game</title>
     <script src="../scripts/config.js" defer></script>
     <script src="../scripts/manager.js" defer></script>
     <script src="../scripts/index.js" defer></script>
@@ -15,8 +15,7 @@
   <body>
     <header class="banner">
       <section>
-        <h1>JOWman Benchmark</h1>
-        <p>60 secondes, 7 lettres, un max de points</p>
+        <h1>JOW Games</h1>
       </section>
       <div id="homeButton">
         <a href="/"
@@ -78,9 +77,12 @@
         </div>
       </div>
       <div class="main-box">
-        <h2 class="title">Typing Speed Game</h2>
+        <h2 class="section-title">Typing Speed Game</h2>
+        <p class="game-description">
+          Goal: write as fast as possible all the given words (avoid mistakes!)
+        </p>
         <div class="all_btn">
-          <button id="startGameButton" onclick="run(60)" class="btn">
+          <button id="startGameButton" onclick="run()" class="btn">
             Start Game
           </button>
           <button onclick="window.location.href='scoreboard'" class="btn">
@@ -91,15 +93,8 @@
           <p><span id="time">(Waiting for the game to start)</span></p>
           <p>Score: <span id="scoreDiv">0</span></p>
           <div class="input-container">
-            <label id="label">Type here:</label>
-            <div id="zoneToType" tabindex="1">
-              <span class="current">T</span>
-              <span class="">e</span>
-              <span class="">e</span>
-              <span class="">m</span>
-              <span class="">o</span>
-              <span class="">&nbsp;</span>
-            </div>
+            <span id="label">Type here:</span>
+            <div id="zoneToType" tabindex="1"></div>
           </div>
         </section>
       </div>
