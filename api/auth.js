@@ -11,7 +11,6 @@ require("dotenv").config();
 
 // User registration
 auth.post("/register", async (req, res) => {
-  console.log("REGiSTER " + req.headers);
   try {
     let user = await fetchData(req, "/api/users/create", undefined, undefined, {
       Login: req.headers.login,
@@ -138,14 +137,11 @@ auth.post("/logout", requireAuth, async (req, res) => {
 });
 
 auth.post("/log", async (req, res) => {
-  console.log(">>>> Session ID", req.session.id);
-  console.log(">>>> Session Info", req.session);
-  console.log(
-    ">>>> Request Cookie(s)",
-    getHeader(req, res) ? "exist" : "inexistent"
-  );
-
-  res.status(200).json(getHeader(req, res));
+  res.status(200).json({
+    sessionId: req.session.id,
+    session: req.session,
+    cookies: getHeader(req, res),
+  });
 });
 
 auth.post("/preload", requireAuth, async (req, res) => {

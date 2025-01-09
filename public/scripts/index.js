@@ -1,7 +1,3 @@
-function checkWord(typedWord, wordToType) {
-  return typedWord == wordToType;
-}
-
 function shuffleWords(array) {
   var i = array.length,
     j = 0,
@@ -19,10 +15,8 @@ function shuffleWords(array) {
   return array;
 }
 
+const zoneToType = document.getElementById("zoneToType");
 function run(timeLimit = 10) {
-  const wordToType = document.getElementById("wordToType");
-  const zoneToType = document.getElementById("zoneToType");
-
   const scoreDiv = document.getElementById("scoreDiv");
   const timeDiv = document.getElementById("time");
   const startButton = document.getElementById("startGameButton");
@@ -46,7 +40,6 @@ function run(timeLimit = 10) {
   timeDiv.textContent = timeRemaining;
 
   startButton.hidden = true;
-  wordToType.textContent = wordList[ranNums[i]];
 
   const interval = setInterval(() => {
     timeRemaining--;
@@ -68,14 +61,73 @@ function run(timeLimit = 10) {
 
   zoneToType.addEventListener("input", () => {
     userInput = zoneToType.value;
-
-    if (checkWord(userInput, wordList[ranNums[i]])) {
-      i++;
-      wordToType.textContent = wordList[ranNums[i]];
-      zoneToType.value = "";
-      userScore++;
-      scoreDiv.textContent = userScore;
-      console.log("Score:", userScore);
-    }
   });
 }
+
+function setWord(list, position) {
+  let chars = list[position].split("");
+  let html;
+  chars.forEach((char) => {
+    html += `<span class="incorrect">${char}</span>
+    `;
+  });
+  html += `<span class="incorrect">&nbsp;</span>
+    `;
+  console.log(html);
+  return html;
+}
+
+function checkChar(char, key) {
+  return char === key;
+}
+
+function inRange(x, min, max) {
+  return x >= min && x <= max;
+}
+
+zoneToType.focus();
+zoneToType.addEventListener("keydown", function (event) {
+  let key;
+  key = event.key; // The actual key pressed
+  if (key == " ") key = "&nbsp;";
+
+  const code = key.codePointAt(0); // Unicode code point for the character
+
+  // Check if the key is alphabetic (a-z or A-Z)
+  const isAlphabetic = /^[a-zA-Z]$/.test(key);
+  const isSpecial = ["&nbsp;", "Backspace"].includes(key);
+
+  const currentChar = document.getElementsByClassName("current")[0];
+
+  // Log the results
+  console.log({
+    key: key,
+    code: code,
+    valid: isAlphabetic || isSpecial,
+    target: currentChar.innerHTML,
+  });
+
+  // Optionally prevent the default action for non-alphabetic keys
+  if (!isAlphabetic && !isSpecial) {
+    event.preventDefault(); // Stops the event from propagating further
+    return;
+  }
+
+  if (key == "Backspace") {
+    if (currentChar.previousElementSibling) {
+      currentChar.removeAttribute("class");
+      currentChar.previousElementSibling.removeAttribute("class");
+      currentChar.previousElementSibling.classList.add("current");
+    }
+  } else {
+    currentChar.classList.remove("current");
+
+    if (checkChar(currentChar.innerHTML, key)) {
+      currentChar.classList.add("correct");
+    } else {
+      currentChar.classList.add("incorrect");
+    }
+
+    currentChar.nextElementSibling.classList.add("current");
+  }
+});

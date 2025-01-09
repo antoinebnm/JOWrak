@@ -45,6 +45,16 @@
   background-color: #bcdcff;
 }
 
+#zoneToType span.incorrect {
+  background: rgba(255, 0, 0, 0.5);
+  color: #fff;
+}
+
+#zoneToType span.correct {
+  background: rgba(35, 222, 35, 0.5);
+  color: #333;
+}
+
 .input-container #zoneToType:focus span.current {
   border-left: 2px solid black;
   margin-left: -2px;
