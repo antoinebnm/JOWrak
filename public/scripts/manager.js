@@ -30,12 +30,12 @@ async function preload() {
       const data = await fetchData("/api/auth/preload", undefined, undefined, {
         Cookie: sid,
       });
-      if (data.name == "Error") {
+      if (data?.name == "Error") {
         throw new Error(
           "preload error, surely due to a server restart (=> erased memory sessions, need to clear cookies)"
         );
       }
-      toggleUserProfil(data);
+      toggleUserProfil(data.displayName);
     } else {
       toggleAuthButtons();
     }

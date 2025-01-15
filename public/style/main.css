@@ -76,9 +76,6 @@ header.banner {
     opacity 0.3s ease,
     transform 0.3s ease; /* Animation sur 0.3s */
   visibility: hidden; /* Cache l'élément initialement */
-  position: absolute;
-  right: 0;
-  top: 100%;
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 4px;

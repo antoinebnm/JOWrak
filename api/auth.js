@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtSignCheck = require("../middlewares/jwtsigncheck");
 const requireAuth = require("../middlewares/requireAuth");
-const getHeader = require("../middlewares/getHeader");
 const fetchData = require("../middlewares/fetchData");
 require("dotenv").config();
 
@@ -137,6 +136,7 @@ auth.post("/logout", requireAuth, async (req, res) => {
 });
 
 auth.post("/log", async (req, res) => {
+  const getHeader = require("../middlewares/getHeader"); // sole call of getHeader -> should delete ?
   res.status(200).json({
     sessionId: req.session.id,
     session: req.session,
@@ -147,8 +147,9 @@ auth.post("/log", async (req, res) => {
 auth.post("/preload", requireAuth, async (req, res) => {
   try {
     const user = req.session.user;
-    res.status(200).json(user.displayName);
+    res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(404).json({ error: "No session user defined." });
   }
 });

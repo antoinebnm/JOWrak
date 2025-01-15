@@ -12,14 +12,14 @@ api.use("/users", async (req, res, next) => {
 });
 
 api.post("/users/create", async (req, res, next) => {
+  if (!req.body?.credentials) {
+    return res.status(400).json({ error: "No user credentials found." });
+  }
   try {
-    console.log("CREATE " + req.headers);
-    const login = req.headers.login;
-    const password = req.headers.password;
-    const username = req.headers.displayname;
+    const { login, password, username } = req.body.credentials;
 
     if (!login || !password || !username) {
-      throw new Error("Missing Authenticate Header");
+      res.status(400).json({ message: "A credentials is missing (undefined)" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +32,7 @@ api.post("/users/create", async (req, res, next) => {
 
     await user.save();
 
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -45,17 +45,6 @@ api.post("/users/read/:id", async (req, res, next) => {
       res.status(200).json(users);
     } else if (await User.findOne({ _id: req.params.id })) {
       res.status(200).json(await User.findOne({ _id: req.params.id }));
-    } else {
-      const user = await User.findOne({
-        "credentials.login": req.params.id,
-      });
-      if (req.params.attribute === undefined) {
-        res.status(400).json({ error: "Bad request" });
-      } else if (user.credentials.password == req.params.attribute) {
-        res.status(200).json(user._id);
-      } else {
-        res.status(401).json({ error: "Unauthorized" });
-      }
     }
   } catch (error) {
     res.status(500).json({ error: "Error when retrieving data" });
@@ -63,47 +52,50 @@ api.post("/users/read/:id", async (req, res, next) => {
 });
 
 api.post("/users/update", async (req, res, next) => {
+  if (!req.body?.updateData) {
+    return res.status(400).json({ error: "No update data found." });
+  }
   try {
-    const userId = req.headers.userId;
-    const setting = req.headers.setting;
-    const changedValue = req.headers.changedValue;
+    const { userId, attribute, value } = req.body.updateData;
 
-    if (setting == "gamesPlayed") {
+    if (attribute == "gamesPlayed") {
       let gamesHistory = await User.findOne({
         _id: userId,
       }).get("gamesPlayed");
-      const newGame = await Game.findById(changedValue);
-      gamesHistory.push(newGame);
+
+      const storedGame = await Game.findById(value);
+      gamesHistory.push(storedGame);
+
       await User.updateOne(
         { _id: userId },
         {
           $set: { gamesPlayed: gamesHistory },
         }
       );
+    } else {
+      await User.findOneAndUpdate(
+        { _id: userId },
+        { [attribute]: value },
+        { returnOriginal: false }
+      ).then(() => {
+        res.status(200).json({ message: "User document updated" });
+      });
     }
-
-    await User.findOneAndUpdate(
-      { _id: userId },
-      { [setting]: changedValue },
-      { returnOriginal: false }
-    ).then(() => {
-      res.status(200).json({ message: "User document updated" });
-    });
   } catch (error) {
-    console.log(error.message);
-    res.status(400).json({ error: "Bad request" });
+    res.status(500).json();
   }
 });
 
 api.post("/users/delete/:id", async (req, res, next) => {
   try {
+    if (!req.params.id) res.status(400).json({ error: "User ID is missing." });
     await User.findOneAndDelete({ _id: req.params.id }).then((user) => {
       res.status(200).json({
         message: `User (id: ${user._id} | name: ${user.displayName}) successfully deleted.`,
       });
     });
   } catch (error) {
-    res.status(500).json({ error: "Error when retrieving data" });
+    res.status(500).json({ error });
   }
 });
 
