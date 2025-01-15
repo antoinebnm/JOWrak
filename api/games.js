@@ -13,14 +13,14 @@ api.use("/games", async (req, res, next) => {
 
 api.post("/games/create", async (req, res, next) => {
   try {
-    if (!req.headers?.gamedetails) {
+    if (!req.body?.gamedetails) {
       throw new Error("No game details headers found.");
     }
 
     try {
       // Parse the GameDetails header
       const { _type, _score, _playedBy, _playedAt } = JSON.parse(
-        req.headers?.gamedetails
+        req.body.gamedetails
       );
 
       // Convert `_score` to an integer
@@ -31,19 +31,15 @@ api.post("/games/create", async (req, res, next) => {
           .json({ error: "Invalid score: must be an integer" });
       }
 
-      let playedBy;
-      if (_playedBy == "null") {
-        playedBy = "0".repeat(24);
-      }
-      playedBy = await User.findById(playedBy);
+      let player;
+      if (_playedBy == "null") player = await User.findById("0".repeat(24));
+      else player = await User.findById(_playedBy);
 
       // Convert `_playedAt` to a Date object
       let playedAt;
-      if (_playedAt == "null") {
-        playedAt = new Date();
-      } else {
-        playedAt = new Date(_playedAt);
-      }
+      if (_playedAt == "null") playedAt = new Date();
+      else playedAt = new Date(_playedAt);
+
       if (isNaN(playedAt.getTime())) {
         return res.status(400).json({
           error: "Invalid date: must be a valid ISO string or timestamp",
@@ -54,7 +50,7 @@ api.post("/games/create", async (req, res, next) => {
       const newGame = new Game({
         type: _type,
         score: score,
-        playedBy: playedBy._id,
+        playedBy: player._id,
         playedAt: playedAt,
       });
 
