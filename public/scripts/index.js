@@ -95,6 +95,7 @@ let gameStarted = null;
 let filledCharacters;
 
 function run(timeLimit = null) {
+  zoneToType.classList = "focused";
   gameStarted = true;
   startButton.hidden = true;
   if (!timeLimit) timeDiv.textContent = "Partie en cours...";
@@ -110,10 +111,8 @@ function run(timeLimit = null) {
       "incorrect",
     ]);
     let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
-    scoreDiv.textContent = getScore(
-      getWPM(filledCharacters.total, timeSpent),
-      accuracy
-    );
+    let score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
+    scoreDiv.textContent = isNaN(score) ? 0 : score;
   }, 1000);
 }
 
@@ -162,6 +161,7 @@ zoneToType.addEventListener("keydown", function (event) {
     offsetChildren(zoneToType, "span", -currentChar.offsetWidth);
     if (!currentChar.nextElementSibling) {
       gameStarted = false;
+      zoneToType.classList["focused"] = false;
       clearInterval(interval); // Arrêter la mise à jour du temps
       //zoneToType.hidden = true;
 

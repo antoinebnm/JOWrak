@@ -40,7 +40,7 @@
   background-color: #bcdcff;
 }
 
-.input-container #zoneToType:focus {
+.input-container #zoneToType:focus.focused {
   background-color: #bcdcff;
 }
 
@@ -58,7 +58,7 @@
   position: relative;
 }
 
-.input-container #zoneToType:focus span.current {
+.input-container #zoneToType:focus.focused span.current {
   border-left: 2px solid black;
   margin-left: -2px;
   animation: 1s ease 0s infinite normal none running cursorBlink;
