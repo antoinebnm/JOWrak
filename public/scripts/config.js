@@ -26,6 +26,7 @@ var fetchData = async (
       headers: headers,
       body: JSON.stringify(body),
     });
+
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
