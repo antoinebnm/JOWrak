@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  align-content: space-between;
+  margin-top: 2rem;
 
   text-align: center;
   font-family: "Arial", arial, sans-serif;
