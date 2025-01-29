@@ -82,7 +82,7 @@ async function preloadGame() {
   try {
     const data = await fetchData("/api/auth/session", undefined, "GET");
     if (data?.currentGame) {
-      //loadCurrentGame();
+      loadCurrentGame(null);
     } else {
       loadNewGame();
     }
@@ -103,6 +103,48 @@ function loadNewGame(NoW = 10) {
   zoneToType.firstChild.classList = "current";
 
   offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
+}
+
+function loadCurrentGame(body) {
+  const test = { A: 0, a: 1, r: 1, o: 1, n: 1, n: 0 };
+
+  let charColor;
+  Object.entries(test).forEach((pair) => {
+    if (pair[1]) charColor = "correct";
+    else charColor = "incorrect";
+    zoneToType.innerHTML = `<span class="${charColor}">${pair[0]}</span>
+  `;
+  });
+
+  offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
+
+  gameStarted = false;
+  zoneToType.classList["focused"] = false;
+
+  startButton.textContent = "Rejouer ?";
+  startButton.hidden = false;
+  timeDiv.textContent = "Partie terminée !";
+
+  return;
+
+  let score = body?.score;
+  let date = body?.date;
+  let typeResult = body?.typeResult;
+  let userId = body?.userId;
+
+  if (!score || !date || !typeResult) {
+    console.error("Score, Date or Typing results missing.");
+    return;
+  }
+
+  offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
+
+  gameStarted = false;
+  zoneToType.classList["focused"] = false;
+
+  startButton.textContent = "Rejouer ?";
+  startButton.hidden = false;
+  timeDiv.textContent = "Partie terminée !";
 }
 
 function run(timeLimit = null) {

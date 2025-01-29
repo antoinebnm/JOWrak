@@ -152,6 +152,7 @@ auth.post("/log", async (req, res) => {
   });
 });
 
+// TODO: split to new api call
 auth.use("/session/:id?", async (req, res) => {
   if (req.method == "GET") {
     if (req.session[req.params?.id])
