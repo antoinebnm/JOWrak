@@ -28,10 +28,13 @@ function updateTable(players, gameType) {
 }
 
 // Appelle la fonction pour récupérer les données et mettre à jour le tableau (à chaque chargement de la page scoreboard)
-fetchData("api/users/all", undefined, "GET").then((users) => {
-  if (users == undefined) throw Error("fetchData issue");
-  let TCid = "0".repeat(24);
-  users = users.filter((user) => user._id != TCid);
-  console.log(users);
-  updateTable(users, "typeSpeed"); // Json to array
-});
+try {
+  fetchData("api/users/all", undefined, "GET").then((users) => {
+    let TCid = "0".repeat(24);
+    users = users.filter((user) => user._id != TCid);
+    //console.log(users);
+    updateTable(users, "typeSpeed"); // Json to array
+  });
+} catch (err) {
+  console.error(err);
+}

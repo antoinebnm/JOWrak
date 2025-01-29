@@ -13,7 +13,12 @@ var myRedirect = function (redirectUrl) {
   f.submit();
 };
 
-var fetchData = async (url = "/", body = {}, method = "POST", headers = {}) => {
+var fetchData = async (
+  url = "/",
+  body = undefined,
+  method = "POST",
+  headers = {}
+) => {
   try {
     headers["Content-Type"] = "application/json";
     const response = await fetch(`${url}`, {
