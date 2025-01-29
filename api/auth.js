@@ -11,11 +11,19 @@ require("dotenv").config();
 // User registration
 auth.post("/register", async (req, res) => {
   try {
-    let user = await fetchData(req, "/api/users/create", undefined, undefined, {
-      Login: req.headers.login,
-      Password: req.headers.password,
-      DisplayName: req.headers.displayname,
-    });
+    let user = await fetchData(
+      req,
+      "/api/users",
+      {
+        credentials: {
+          Login: req.headers.login,
+          Password: req.headers.password,
+          DisplayName: req.headers.displayname,
+        },
+      },
+      "POST",
+      undefined
+    );
 
     //userId => Payload res
     const OAuthToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {

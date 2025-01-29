@@ -11,12 +11,12 @@ api.use("/users", async (req, res, next) => {
   next();
 });
 
-api.post("/users/create", async (req, res, next) => {
+api.post("/users", async (req, res, next) => {
   if (!req.body?.credentials) {
     return res.status(400).json({ error: "No user credentials found." });
   }
   try {
-    const { login, password, username } = req.body.credentials;
+    const [login, password, username] = Object.values(req.body.credentials);
 
     if (!login || !password || !username) {
       res.status(400).json({ message: "A credentials is missing (undefined)" });
@@ -38,7 +38,7 @@ api.post("/users/create", async (req, res, next) => {
   }
 });
 
-api.post("/users/read/:id", async (req, res, next) => {
+api.get("/users/:id", async (req, res, next) => {
   try {
     if (req.params.id == "all") {
       const users = await User.find(); // Trouve les users
@@ -51,7 +51,7 @@ api.post("/users/read/:id", async (req, res, next) => {
   }
 });
 
-api.post("/users/update", async (req, res, next) => {
+api.put("/users", async (req, res, next) => {
   if (!req.body?.updateData) {
     return res.status(400).json({ error: "No update data found." });
   }
@@ -86,7 +86,7 @@ api.post("/users/update", async (req, res, next) => {
   }
 });
 
-api.post("/users/delete/:id", async (req, res, next) => {
+api.delete("/users/:id", async (req, res, next) => {
   try {
     if (!req.params.id) res.status(400).json({ error: "User ID is missing." });
     await User.findOneAndDelete({ _id: req.params.id }).then((user) => {

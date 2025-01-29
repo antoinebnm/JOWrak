@@ -29,7 +29,7 @@ describe("Authentication", () => {
     await mongoTeardown();
   });
 
-  describe("POST /register", () => {
+  describe("AUTH /register", () => {
     afterEach(async () => {
       // Clean DB after each use
       await User.deleteMany({});
@@ -52,7 +52,7 @@ describe("Authentication", () => {
     });
   });
 
-  describe("POST /login", () => {
+  describe("AUTH /login", () => {
     beforeEach(async () => {
       // Create a test user for auth tests
       testUser = new User({
@@ -128,7 +128,7 @@ describe("Authentication", () => {
     });
   });
 
-  describe("POST /logout", () => {
+  describe("AUTH /logout", () => {
     it("should log out the user (delete session data and erase cookies)", async () => {
       // Mock some user info in session
       sessionManager.setMockSessionData({ user: { info: "someinfo" } });
@@ -144,7 +144,7 @@ describe("Authentication", () => {
     });
   });
 
-  describe("POST /preload", () => {
+  describe("AUTH /preload", () => {
     beforeEach(async () => {
       // Create a test user
       testUser = new User({
@@ -179,7 +179,9 @@ describe("Authentication", () => {
         .set({ Cookie: "sid=somesessioncookie" })
         .expect(200);
 
-      expect(response.body).toBe("TestUser");
+      expect(response.body).toEqual({
+        displayName: "TestUser",
+      });
     });
   });
 });
