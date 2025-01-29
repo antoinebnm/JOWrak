@@ -63,14 +63,14 @@ function switchFields(array, hide = true) {
 
 function toggleUserProfil(name) {
   authButtons.hidden = true;
-  accountMenu.style.visibility = "visible";
+  accountMenu.style.display = "flex";
 
   userProfil.textContent = name;
 }
 
 function toggleAuthButtons() {
   authButtons.hidden = false;
-  accountMenu.style.visibility = "hidden";
+  accountMenu.style.display = "none";
 }
 
 // Fonction pour ouvrir le popup
