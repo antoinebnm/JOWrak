@@ -68,14 +68,17 @@ app.use((req, res, next) => {
 const router = require("./public/router/routes");
 app.use("/", router);
 
-const apiUser = require("./api/users");
-app.use("/api", apiUser);
+const apiUsers = require("./api/users");
+app.use("/api/users", apiUsers);
 
 const apiGames = require("./api/games");
-app.use("/api", apiGames);
+app.use("/api/games", apiGames);
 
-const auth = require("./api/auth");
-app.use("/api/auth", auth);
+const apiSession = require("./api/session");
+app.use("/api/session", apiSession);
+
+const apiAuth = require("./api/auth");
+app.use("/api/auth", apiAuth);
 
 // DB connection
 const connectDB = require("./middlewares/connectDB");

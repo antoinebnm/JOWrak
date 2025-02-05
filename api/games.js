@@ -4,13 +4,13 @@ const User = require("../models/User");
 const Game = require("../models/Game");
 require("dotenv").config();
 
-api.use("/games", async (req, res, next) => {
+api.use("/", async (req, res, next) => {
   // protected route, is exe admin ?
   // no tests for now / todo: tests
   next();
 });
 
-api.post("/games", async (req, res, next) => {
+api.post("/", async (req, res, next) => {
   if (!req.body?.gameDetails) {
     return res.status(400).json({ error: "No game details found." });
   }
@@ -58,7 +58,7 @@ api.post("/games", async (req, res, next) => {
   }
 });
 
-api.get("/games/:id", async (req, res, next) => {
+api.get("/:id", async (req, res, next) => {
   try {
     if (await User.findOne({ _id: req.params.id })) {
       res
@@ -72,11 +72,11 @@ api.get("/games/:id", async (req, res, next) => {
   }
 });
 
-api.put("/games/:id", async (req, res, next) => {
+api.put("/:id", async (req, res, next) => {
   res.status(204);
 });
 
-api.delete("/games/:id", async (req, res, next) => {
+api.delete("/:id", async (req, res, next) => {
   try {
     // Find and delete the game
     const game = await Game.findOneAndDelete({ _id: req.params.id });

@@ -5,13 +5,13 @@ const User = require("../models/User");
 const Game = require("../models/Game");
 require("dotenv").config();
 
-api.use("/users", async (req, res, next) => {
+api.use("/", async (req, res, next) => {
   // protected route, is exe admin ?
   // no tests for now / todo: tests
   next();
 });
 
-api.post("/users", async (req, res, next) => {
+api.post("/", async (req, res, next) => {
   if (!req.body?.credentials) {
     return res.status(400).json({ error: "No user credentials found." });
   }
@@ -38,7 +38,7 @@ api.post("/users", async (req, res, next) => {
   }
 });
 
-api.get("/users/:id", async (req, res, next) => {
+api.get("/:id", async (req, res, next) => {
   try {
     if (req.params.id == "all") {
       const users = await User.find(); // Trouve les users
@@ -51,7 +51,7 @@ api.get("/users/:id", async (req, res, next) => {
   }
 });
 
-api.put("/users", async (req, res, next) => {
+api.put("/", async (req, res, next) => {
   if (!req.body?.updateData) {
     return res.status(400).json({ error: "No update data found." });
   }
@@ -86,7 +86,7 @@ api.put("/users", async (req, res, next) => {
   }
 });
 
-api.delete("/users/:id", async (req, res, next) => {
+api.delete("/:id", async (req, res, next) => {
   try {
     if (!req.params.id) res.status(400).json({ error: "User ID is missing." });
     await User.findOneAndDelete({ _id: req.params.id }).then((user) => {

@@ -80,7 +80,7 @@ function getAccuracy(parent, target, options) {
 
 async function preloadGame() {
   try {
-    const data = await fetchData("/api/auth/session", undefined, "GET");
+    const data = await fetchData("/api/session", undefined, "GET");
     if (data?.currentGame) {
       loadCurrentGame(null);
     } else {
