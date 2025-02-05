@@ -21,8 +21,9 @@ const createServer = async () => {
   app.use(express.json());
   app.use(sessionManager.create());
   app.use("/api/auth", require("../../api/auth"));
-  app.use("/api", require("../../api/games"));
-  app.use("/api", require("../../api/users"));
+  app.use("/api/games", require("../../api/games"));
+  app.use("/api/users", require("../../api/users"));
+  app.use("/api/session", require("../../api/session"));
 
   const PORT = process.env.TEST_PORT || 0;
   const server = app.listen(PORT);

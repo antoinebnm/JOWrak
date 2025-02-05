@@ -2,12 +2,6 @@ const express = require("express");
 const api = express.Router();
 require("dotenv").config();
 
-api.use("/", async (req, res, next) => {
-  // protected route, is exe admin ?
-  // no tests for now / todo: tests
-  next();
-});
-
 api.use("/:id?", async (req, res) => {
   if (req.method == "GET") {
     if (req.session[req.params?.id])
@@ -33,3 +27,5 @@ api.use("/:id?", async (req, res) => {
         .json({ error: "The request section ID is missing or invalid." });
   } else res.status(400).json({ error: "Request method unavailable" });
 });
+
+module.exports = api;

@@ -1430,3 +1430,15 @@ const wordList = [
   "Wronged",
   "Zealous",
 ];
+
+// fetch(
+//   "https://raw.githubusercontent.com/powerlanguage/word-lists/refs/heads/master/common-7-letter-words.txt"
+// )
+//   .then((response) =>
+//     response.text().then((data) => {
+//       wordList = data.split("\n");
+//     })
+//   )
+//   .catch((err) => {
+//     console.error(err);
+//   });

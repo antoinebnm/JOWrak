@@ -29,14 +29,14 @@ function shuffleWords(array) {
   return array;
 }
 
-function setWords(list) {
+function setWords(wordlist, sample) {
   let html = ``;
-  list.forEach((word) => {
-    wordList[word].split("").forEach((char) => {
+  sample.forEach((word) => {
+    wordlist[word].split("").forEach((char) => {
       html += `<span class="">${char}</span>
 `;
     });
-    if (list.indexOf(word) != list.length - 1)
+    if (sample.indexOf(word) != sample.length - 1)
       html += `<span class="">&nbsp;</span>
 `;
   });
@@ -78,74 +78,56 @@ function getAccuracy(parent, target, options) {
   return { total: counter, correct: correct };
 }
 
-async function preloadGame() {
-  try {
-    const data = await fetchData("/api/session", undefined, "GET");
-    if (data?.currentGame) {
-      loadCurrentGame(null);
-    } else {
-      loadNewGame();
-    }
-  } catch (error) {
-    console.log(error);
-    //window.location.reload();
-  }
-}
+// async function preloadGame() {
+//   try {
+//     const data = await fetchData("/api/session", undefined, "GET");
+//     if (data?.currentGameId) {
+//       loadCurrentGame(data.currentGameId);
+//     } else {
+//       loadNewGame();
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     //window.location.reload();
+//   }
+// }
 
-preloadGame();
+// preloadGame();
 
 function loadNewGame(NoW = 10) {
   const ranNums = shuffleWords(
     Array.from({ length: NoW }, () => Math.floor(Math.random() * 1372))
   );
-
-  zoneToType.innerHTML = setWords(ranNums);
-  zoneToType.firstChild.classList = "current";
+  if (wordList) {
+    zoneToType.innerHTML = setWords(wordList, ranNums);
+    zoneToType.firstChild.classList = "current";
+  } else window.location.reload();
 
   offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
 }
 
-function loadCurrentGame(body) {
-  const test = { A: 0, a: 1, r: 1, o: 1, n: 1, n: 0 };
+loadNewGame();
 
-  let charColor;
-  Object.entries(test).forEach((pair) => {
-    if (pair[1]) charColor = "correct";
-    else charColor = "incorrect";
-    zoneToType.innerHTML = `<span class="${charColor}">${pair[0]}</span>
-  `;
-  });
+// function loadCurrentGame(body) {
+//   let score = body?.score;
+//   let date = body?.date;
+//   let typeResult = body?.typeResult;
+//   let userId = body?.userId;
 
-  offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
+//   if (!score || !date || !typeResult) {
+//     console.error("Score, Date or Typing results missing.");
+//     return;
+//   }
 
-  gameStarted = false;
-  zoneToType.classList["focused"] = false;
+//   offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
 
-  startButton.textContent = "Rejouer ?";
-  startButton.hidden = false;
-  timeDiv.textContent = "Partie terminée !";
+//   gameStarted = false;
+//   zoneToType.classList["focused"] = false;
 
-  return;
-
-  let score = body?.score;
-  let date = body?.date;
-  let typeResult = body?.typeResult;
-  let userId = body?.userId;
-
-  if (!score || !date || !typeResult) {
-    console.error("Score, Date or Typing results missing.");
-    return;
-  }
-
-  offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
-
-  gameStarted = false;
-  zoneToType.classList["focused"] = false;
-
-  startButton.textContent = "Rejouer ?";
-  startButton.hidden = false;
-  timeDiv.textContent = "Partie terminée !";
-}
+//   startButton.textContent = "Rejouer ?";
+//   startButton.hidden = false;
+//   timeDiv.textContent = "Partie terminée !";
+// }
 
 function run(timeLimit = null) {
   let interval;

@@ -68,14 +68,16 @@ app.use((req, res, next) => {
 const router = require("./public/router/routes");
 app.use("/", router);
 
+const isAuthorized = require("./middlewares/isAuthorized");
+
 const apiUsers = require("./api/users");
-app.use("/api/users", apiUsers);
+app.use("/api/users", isAuthorized, apiUsers);
 
 const apiGames = require("./api/games");
-app.use("/api/games", apiGames);
+app.use("/api/games", isAuthorized, apiGames);
 
 const apiSession = require("./api/session");
-app.use("/api/session", apiSession);
+app.use("/api/session", isAuthorized, apiSession);
 
 const apiAuth = require("./api/auth");
 app.use("/api/auth", apiAuth);
@@ -92,6 +94,7 @@ connectDB();
 app.use((req, res, next) => {
   next(createError(404));
 });
+
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
@@ -100,7 +103,8 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.send(`<h1>Error ${err.status} - ${err.message}</h1>`);
+  //res.send(`<h1>Error ${err.status} - ${err.message}</h1>`);
+  res.sendFile("./notfound.html", { root: __dirname });
 });
 
 /**

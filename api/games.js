@@ -4,12 +4,6 @@ const User = require("../models/User");
 const Game = require("../models/Game");
 require("dotenv").config();
 
-api.use("/", async (req, res, next) => {
-  // protected route, is exe admin ?
-  // no tests for now / todo: tests
-  next();
-});
-
 api.post("/", async (req, res, next) => {
   if (!req.body?.gameDetails) {
     return res.status(400).json({ error: "No game details found." });

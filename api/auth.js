@@ -22,7 +22,7 @@ auth.post("/register", async (req, res) => {
         },
       },
       "POST",
-      undefined
+      { Authorization: process.env.ADMIN_ACCESS }
     );
 
     //userId => Payload res
