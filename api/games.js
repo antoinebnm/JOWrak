@@ -10,7 +10,7 @@ api.post("/", async (req, res, next) => {
   }
 
   try {
-    // Parse the GameDetails header
+    // Parse the GameDetails
     const { _type, _score, _playedBy, _playedAt } = req.body.gameDetails;
 
     // Convert `_score` to an integer

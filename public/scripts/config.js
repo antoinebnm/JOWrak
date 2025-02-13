@@ -13,6 +13,14 @@ var myRedirect = function (redirectUrl) {
   f.submit();
 };
 
+/**
+ * Custom fetch method
+ * @param {string} url      URI element
+ * @param {object} body     Body object
+ * @param {string} method   POST | GET | PUT | DELETE
+ * @param {object} headers  Request headers
+ * @returns Json argument
+ */
 var fetchData = async (
   url = "/",
   body = undefined,
@@ -48,12 +56,52 @@ var getCookie = function (name) {
     var pair = cookies[i].trim().split("=");
     if (pair[0] == name) return pair[1];
   }
-  return null;
+};
+
+/**
+ * Cookie setter
+ * @param {string} name
+ * @param {*} value Stringified argument
+ * @param {array} expireIn [day, hour, minute, second]
+ */
+var setCookie = function (name, value = "", expireIn = [0, 1, 0, 0]) {
+  var expire = new Date();
+  let [day, hour, minute, second] = [...expireIn];
+  expire.setTime(
+    expire.getTime() + (((day * 24 + hour) * 60 + minute) * 60 + second) * 1000
+  );
+  document.cookie = `${name}=${JSON.stringify(value)}; expires=${expire.toUTCString()}`;
 };
 
 var eraseCookie = function (name) {
   document.cookie = name + "=; expires=Thu, 01-Jan-1970 00:00:01 GMT;";
-  return null;
+};
+
+/**
+ * Save game data either in cookies (session) or in mongoDB cluster
+ * @param {object} gameInfo Format: {type, score, playedByUser, playedAtDate}
+ * @async
+ */
+var saveGame = async function (gameInfo) {
+  let session = getCookie("session") | undefined;
+  if (session?.user) {
+    const userId = session.user.userId;
+    const body = {
+      gameDetails: {
+        _type: gameInfo.type,
+        _score: gameInfo.score,
+        _playedBy: userId,
+        _playedAt: new Date(),
+      },
+    };
+    const data = await fetchData("/api/games", body, "POST", undefined);
+    if (data?.name == "Error") {
+      throw new Error(data);
+    }
+    console.log(data);
+  } else {
+    console.error("user not authenticated");
+  }
 };
 
 // 1371 words

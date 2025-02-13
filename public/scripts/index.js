@@ -130,10 +130,9 @@ loadNewGame();
 // }
 
 function run(timeLimit = null) {
-  let interval;
+  let interval, score, filledCharacters;
   let timeSpent = 0;
   let gameStarted = null;
-  let filledCharacters;
 
   zoneToType.classList = "focused";
   gameStarted = true;
@@ -151,7 +150,7 @@ function run(timeLimit = null) {
       "incorrect",
     ]);
     let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
-    let score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
+    score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
     scoreDiv.textContent = isNaN(score) ? 0 : score;
   }, 1000);
 
@@ -207,6 +206,11 @@ function run(timeLimit = null) {
         startButton.textContent = "Rejouer ?";
         startButton.hidden = false;
         timeDiv.textContent = "Partie terminée !";
+
+        const gameInfo = {};
+        gameInfo["type"] = "typeSpeed";
+        gameInfo["score"] = score;
+        saveGame(); // Save game in mongo or cookie depends on user auth
         return;
       }
       currentChar.nextElementSibling.classList.add("current");

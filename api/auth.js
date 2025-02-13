@@ -40,6 +40,7 @@ auth.post("/register", async (req, res) => {
 
       // store user information in session, typically a user id
       req.session.user = {
+        userId: user._id,
         OAuthToken: OAuthToken,
         displayName: user.displayName,
       };
@@ -111,6 +112,7 @@ auth.post("/login", async (req, res, next) => {
 
       // store user information in session, typically a user id
       req.session.user = {
+        userId: user._id,
         OAuthToken: OAuthToken,
         displayName: user.displayName,
       };

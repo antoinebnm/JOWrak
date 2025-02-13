@@ -42,6 +42,7 @@ async function preload() {
   } catch (error) {
     console.log(error);
     eraseCookie("sid");
+    eraseCookie("user");
     window.location.reload();
   }
 }
@@ -167,6 +168,7 @@ authForm.addEventListener("submit", async (event) => {
       throw new Error("Unique user login required !");
     }
     if (data?.userInfo) {
+      setCookie("user", data.userInfo, [1, 0, 0, 0]);
       toggleUserProfil(data.userInfo.displayName);
     }
 
