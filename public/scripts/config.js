@@ -50,6 +50,11 @@ var fetchData = async (
   }
 };
 
+/**
+ * Cookie getter
+ * @param {string} name
+ * @returns {string} String
+ */
 var getCookie = function (name) {
   var cookies = document.cookie.split(";");
   for (var i = 0; i < cookies.length; ++i) {
@@ -83,14 +88,14 @@ var eraseCookie = function (name) {
  * @async
  */
 var saveGame = async function (gameInfo) {
-  let session = getCookie("session") | undefined;
-  if (session?.user) {
-    const userId = session.user.userId;
+  let user = getCookie("user");
+  console.log(user);
+  if (user) {
     const body = {
       gameDetails: {
         _type: gameInfo.type,
         _score: gameInfo.score,
-        _playedBy: userId,
+        _playedBy: user.userId,
         _playedAt: new Date(),
       },
     };

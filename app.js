@@ -7,6 +7,7 @@ const path = require("path");
 const logger = require("morgan");
 const compression = require("compression");
 const session = require("express-session");
+const cors = require("cors");
 
 require("dotenv").config();
 
@@ -53,6 +54,25 @@ app.use(limiter);
 // public access resource setup
 app.use(express.static(path.join(__dirname, "public")));
 
+const allowedOrigins = [
+  "http://localhost:3000", // Local frontend
+  "", // Production frontend
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 /**
  * Router Setup
  */
@@ -68,16 +88,11 @@ app.use((req, res, next) => {
 const router = require("./public/router/routes");
 app.use("/", router);
 
-const isAuthorized = require("./middlewares/isAuthorized");
-
 const apiUsers = require("./api/users");
-app.use("/api/users", isAuthorized, apiUsers);
+app.use("/api/users", apiUsers);
 
 const apiGames = require("./api/games");
-app.use("/api/games", isAuthorized, apiGames);
-
-const apiSession = require("./api/session");
-app.use("/api/session", isAuthorized, apiSession);
+app.use("/api/games", apiGames);
 
 const apiAuth = require("./api/auth");
 app.use("/api/auth", apiAuth);

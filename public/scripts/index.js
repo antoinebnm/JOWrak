@@ -94,7 +94,7 @@ function getAccuracy(parent, target, options) {
 
 // preloadGame();
 
-function loadNewGame(NoW = 10) {
+function loadNewGame(NoW = 1) {
   const ranNums = shuffleWords(
     Array.from({ length: NoW }, () => Math.floor(Math.random() * 1372))
   );
@@ -210,7 +210,7 @@ function run(timeLimit = null) {
         const gameInfo = {};
         gameInfo["type"] = "typeSpeed";
         gameInfo["score"] = score;
-        saveGame(); // Save game in mongo or cookie depends on user auth
+        saveGame(gameInfo); // Save game in mongo or cookie depends on user auth
         return;
       }
       currentChar.nextElementSibling.classList.add("current");
