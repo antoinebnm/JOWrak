@@ -4,7 +4,8 @@
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
-const logger = require("morgan");
+const morgan = require("morgan");
+const fs = require("fs");
 const compression = require("compression");
 const session = require("express-session");
 const cors = require("cors");
@@ -18,7 +19,7 @@ const app = express();
  */
 app.use(compression()); // Compress all routes
 
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -73,26 +74,44 @@ app.use(
   })
 );
 
-/**
- * Router Setup
- */
-const aliveDate = new Date().getTime();
+// Set up a write stream for logging to a file
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "logs", "access.log"),
+  { flags: "a" }
+);
+
+// Use morgan middleware for HTTP request logging
+app.use(morgan("combined", { stream: accessLogStream }));
+
+// Custom middleware for user activity logging
 app.use((req, res, next) => {
-  console.log(`Time elapsed since alive: ${Date.now() - aliveDate}ms`);
+  // Log user activity
   console.log(
-    `>>>>>>>>>>> Request Type: ${req.method} | URL: ${req.originalUrl}`
+    `[${new Date().toISOString()}] User '${req.session.user?.displayName}' accessed ${req.method} ${req.originalUrl}`
   );
+
+  // Continue with the request processing
   next();
 });
 
+/**
+ * Router Setup
+ */
 const router = require("./public/router/routes");
 app.use("/", router);
 
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self'");
+  res.setHeader("Strict-Transport-Security", "max-age=31536000");
+  next();
+});
+
+const isAuthorized = require("./middlewares/isAuthorized");
 const apiUsers = require("./api/users");
-app.use("/api/users", apiUsers);
+app.use("/api/users", isAuthorized, apiUsers);
 
 const apiGames = require("./api/games");
-app.use("/api/games", apiGames);
+app.use("/api/games", isAuthorized, apiGames);
 
 const apiAuth = require("./api/auth");
 app.use("/api/auth", apiAuth);

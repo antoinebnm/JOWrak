@@ -27,7 +27,7 @@ async function preload() {
   try {
     const sid = getCookie("sid") || null;
     if (sid) {
-      const data = await fetchData("/api/auth/preload", undefined, undefined, {
+      const data = await fetchData("/api/auth/session", undefined, undefined, {
         Cookie: sid,
       });
       if (data?.name == "Error") {

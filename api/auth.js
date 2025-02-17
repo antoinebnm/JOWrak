@@ -22,7 +22,7 @@ auth.post("/register", async (req, res) => {
         },
       },
       "POST",
-      { Authorization: process.env.ADMIN_ACCESS }
+      undefined
     );
 
     //userId => Payload res
@@ -140,7 +140,6 @@ auth.post("/logout", requireAuth, async (req, res) => {
   res.clearCookie("sid");
   req.session.destroy(function (err) {
     if (err) next(err);
-
     res.status(200).json(req.session);
   });
 });
@@ -154,7 +153,7 @@ auth.post("/log", async (req, res) => {
   });
 });
 
-auth.post("/preload", requireAuth, async (req, res) => {
+auth.post("/session", requireAuth, async (req, res) => {
   const user = req.session.user;
   res.status(200).json(user);
 });

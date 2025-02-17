@@ -34,7 +34,7 @@ api.post("/", async (req, res, next) => {
 
 api.get("/:id", async (req, res, next) => {
   try {
-    if (req.params.id == "all") {
+    if (req.params.id == "scoreboard") {
       const users = await User.find(); // Trouve les users
       res.status(200).json(users);
     } else if (await User.findOne({ _id: req.params.id })) {
