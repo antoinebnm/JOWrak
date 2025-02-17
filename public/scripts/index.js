@@ -103,21 +103,28 @@ function loadNewGame(NoW = 1) {
 }
 
 /**
+ * True when first page load/refresh, then set to false
+ */
+let pageReload = true;
+loadNewGame();
+/**
  * Main function to run and manage the game
  * @param {number} timeLimit in seconds (optional)
  */
 function run(timeLimit = null) {
-  loadNewGame();
+  if (!pageReload) loadNewGame();
+  else pageReload = false;
+
   eraseCookie("gameDetails");
+
   let interval, score, filledCharacters;
   let timeSpent = 0;
-  let _typing,
-    gameStarted = null;
 
   typeBox.classList = "focused";
-  gameStarted = true;
-  _typing = false;
+  let gameStarted = true;
+  let _typing = false;
   startButton.hidden = true;
+
   if (!_typing) timeDiv.textContent = "Start typing to begin the timer";
 
   typeText.value = "";
@@ -203,6 +210,7 @@ function run(timeLimit = null) {
           gameInfo["playedBy"] = isUserCo.userId;
           saveGame(gameInfo); // Save game in mongo
         } else {
+          timeDiv.textContent += " Login to save your game score.";
           setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
         }
         return;
