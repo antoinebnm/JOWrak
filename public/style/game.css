@@ -14,11 +14,9 @@
   margin-top: 1rem;
 }
 
-.input-container #zoneToType {
+.input-container #typeBox {
   display: flex;
-  text-align: center;
 
-  user-select: none;
   overflow: hidden;
   outline: none;
 
@@ -32,34 +30,48 @@
   border: none;
   border-radius: 0.4rem;
 
-  padding: 1rem;
-  line-height: 1.6;
   cursor: text;
 }
 
-.input-container #zoneToType:hover {
+#typeText {
+  display: flex;
+  text-align: center;
+
+  user-select: none;
+
+  width: auto;
+  min-width: 16.5rem;
+  max-width: 24rem;
+  min-height: 2rem;
+  height: fit-content;
+
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.input-container #typeBox:hover {
   background-color: #bcdcff;
 }
 
-.input-container #zoneToType:focus.focused {
+.input-container #typeBox:focus.focused {
   background-color: #bcdcff;
 }
 
-#zoneToType span.incorrect {
+#typeText span.incorrect {
   background: rgba(255, 0, 0, 0.5);
   color: #fff;
 }
 
-#zoneToType span.correct {
+#typeText span.correct {
   background: rgba(35, 222, 35, 0.5);
   color: #333;
 }
 
-.input-container #zoneToType span {
+.input-container #typeBox #typeText span {
   position: relative;
 }
 
-.input-container #zoneToType:focus.focused span.current {
+.input-container #typeBox:focus.focused #typeText span.current {
   border-left: 2px solid black;
   margin-left: -2px;
   animation: 1s ease 0s infinite normal none running cursorBlink;

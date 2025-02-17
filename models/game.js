@@ -10,9 +10,9 @@ const gameSchema = new Schema(
       enum: ["wordle", "typeSpeed"], // wordle: find the word game / typeSpeed: fast typo game
       default: "typeSpeed",
     },
-    score: { type: Number, required: true, default: 0 },
-    playedBy: { type: Schema.Types.ObjectId, ref: "User" },
-    playedAt: { type: Date, required: true },
+    score: { type: Number, default: 0 },
+    playedBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    playedAt: { type: Date, default: new Date() },
     won: { type: Boolean },
     playTime: { type: Number },
   },

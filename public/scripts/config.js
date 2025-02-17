@@ -83,7 +83,7 @@ var eraseCookie = function (name) {
 };
 
 /**
- * Save game data either in cookies (session) or in mongoDB cluster
+ * Save game data in mongoDB cluster
  * @param {object} gameInfo Format: {type, score, playedByUser, playedAtDate}
  * @async
  */

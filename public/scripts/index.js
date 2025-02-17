@@ -1,10 +1,17 @@
 // formatage
-const zoneToType = document.getElementById("zoneToType");
+const typeBox = document.getElementById("typeBox");
+const typeText = document.getElementById("typeText");
 const scoreDiv = document.getElementById("scoreDiv");
 const timeDiv = document.getElementById("time");
 const startButton = document.getElementById("startGameButton");
 
 let totalOffset = 0;
+/**
+ * Offset target in pixels
+ * @param {HTMLElement} parent
+ * @param {string} target
+ * @param {number} offset
+ */
 function offsetChildren(parent, target, offset) {
   totalOffset += offset;
   parent.querySelectorAll(target).forEach((el) => {
@@ -78,85 +85,60 @@ function getAccuracy(parent, target, options) {
   return { total: counter, correct: correct };
 }
 
-// async function preloadGame() {
-//   try {
-//     const data = await fetchData("/api/session", undefined, "GET");
-//     if (data?.currentGameId) {
-//       loadCurrentGame(data.currentGameId);
-//     } else {
-//       loadNewGame();
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     //window.location.reload();
-//   }
-// }
-
-// preloadGame();
-
+/**
+ * Load a new game using wordList
+ * @param {number} NoW Number of Word to include (integer)
+ */
 function loadNewGame(NoW = 1) {
+  totalOffset = 0;
   const ranNums = shuffleWords(
     Array.from({ length: NoW }, () => Math.floor(Math.random() * 1372))
   );
   if (wordList) {
-    zoneToType.innerHTML = setWords(wordList, ranNums);
-    zoneToType.firstChild.classList = "current";
+    typeText.innerHTML = setWords(wordList, ranNums);
+    typeText.firstChild.classList = "current";
   } else window.location.reload();
 
-  offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
+  offsetChildren(typeText, "span", typeText.offsetWidth / 2);
 }
 
-loadNewGame();
-
-// function loadCurrentGame(body) {
-//   let score = body?.score;
-//   let date = body?.date;
-//   let typeResult = body?.typeResult;
-//   let userId = body?.userId;
-
-//   if (!score || !date || !typeResult) {
-//     console.error("Score, Date or Typing results missing.");
-//     return;
-//   }
-
-//   offsetChildren(zoneToType, "span", zoneToType.offsetWidth / 2);
-
-//   gameStarted = false;
-//   zoneToType.classList["focused"] = false;
-
-//   startButton.textContent = "Rejouer ?";
-//   startButton.hidden = false;
-//   timeDiv.textContent = "Partie terminée !";
-// }
-
+/**
+ * Main function to run and manage the game
+ * @param {number} timeLimit in seconds (optional)
+ */
 function run(timeLimit = null) {
+  loadNewGame();
   eraseCookie("gameDetails");
   let interval, score, filledCharacters;
   let timeSpent = 0;
-  let gameStarted = null;
+  let _typing,
+    gameStarted = null;
 
-  zoneToType.classList = "focused";
+  typeBox.classList = "focused";
   gameStarted = true;
+  _typing = false;
   startButton.hidden = true;
-  if (!timeLimit) timeDiv.textContent = "Partie en cours...";
+  if (!_typing) timeDiv.textContent = "Start typing to begin the timer";
 
-  zoneToType.value = "";
-  zoneToType.hidden = false;
-  zoneToType.focus();
+  typeText.value = "";
+  typeBox.hidden = false;
+  typeBox.focus();
 
   interval = setInterval(() => {
+    if (!_typing) return;
+    if (!timeLimit) timeDiv.textContent = "Game in progress...";
+    else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
+
     timeSpent++;
-    filledCharacters = getAccuracy(zoneToType, "span", [
-      "correct",
-      "incorrect",
-    ]);
+    filledCharacters = getAccuracy(typeText, "span", ["correct", "incorrect"]);
     let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
     score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
     scoreDiv.textContent = isNaN(score) ? 0 : score;
   }, 1000);
 
-  zoneToType.addEventListener("keydown", function (event) {
+  typeBox.addEventListener("keydown", function (event) {
     if (!gameStarted) return;
+    if (!_typing) _typing = true;
     let key;
     key = event.key; // The actual key pressed
     if (key == " ") key = "&nbsp;";
@@ -187,7 +169,7 @@ function run(timeLimit = null) {
         currentChar.removeAttribute("class");
         currentChar.previousElementSibling.removeAttribute("class");
         currentChar.previousElementSibling.classList.add("current");
-        offsetChildren(zoneToType, "span", currentChar.offsetWidth);
+        offsetChildren(typeText, "span", currentChar.offsetWidth);
       }
     } else {
       currentChar.classList.remove("current");
@@ -197,16 +179,17 @@ function run(timeLimit = null) {
       } else {
         currentChar.classList.add("incorrect");
       }
-      offsetChildren(zoneToType, "span", -currentChar.offsetWidth);
+      offsetChildren(typeText, "span", -currentChar.offsetWidth);
       if (!currentChar.nextElementSibling) {
         gameStarted = false;
-        zoneToType.classList["focused"] = false;
+        _typing = false;
+        typeBox.classList["focused"] = false;
         clearInterval(interval); // Arrêter la mise à jour du temps
-        //zoneToType.hidden = true;
+        //typeBox.hidden = true;
 
-        startButton.textContent = "Rejouer ?";
+        startButton.textContent = "Play again ?";
         startButton.hidden = false;
-        timeDiv.textContent = "Partie terminée !";
+        timeDiv.textContent = "Game ended !";
 
         /**
          * @const {id, token, name}

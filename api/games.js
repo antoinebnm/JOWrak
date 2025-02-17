@@ -2,7 +2,6 @@ const express = require("express");
 const api = express.Router();
 const User = require("../models/User");
 const Game = require("../models/Game");
-const { connect } = require("mongoose");
 require("dotenv").config();
 
 api.post("/", async (req, res, next) => {
@@ -55,6 +54,10 @@ api.post("/", async (req, res, next) => {
   }
 });
 
+/**
+ *
+ * TODO: opti -> search par arg user/game plutot que id
+ */
 api.get("/:id", async (req, res, next) => {
   try {
     if (await User.findOne({ _id: req.params.id })) {
@@ -65,12 +68,27 @@ api.get("/:id", async (req, res, next) => {
       res.status(200).json(await Game.findOne({ _id: req.params.id }));
     }
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(error.status).json({ error });
   }
 });
 
 api.put("/:id", async (req, res, next) => {
-  res.status(204);
+  if (!req.body?.updateData) {
+    return res.status(400).json({ error: "No update data found." });
+  }
+  try {
+    const { attribute, value } = req.body.updateData;
+    await Game.findOneAndUpdate(
+      { _id: req.params.id },
+      { [attribute]: value },
+      { returnOriginal: false }
+    ).then(() => {
+      res.status(200).json({ message: "User document updated" });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json();
+  }
 });
 
 api.delete("/:id", async (req, res, next) => {
