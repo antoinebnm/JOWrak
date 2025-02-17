@@ -138,6 +138,7 @@ auth.post("/logout", requireAuth, async (req, res) => {
    */
 
   res.clearCookie("sid");
+  res.clearCookie("user");
   req.session.destroy(function (err) {
     if (err) next(err);
     res.status(200).json(req.session);
