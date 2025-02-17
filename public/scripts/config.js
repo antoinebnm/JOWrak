@@ -89,22 +89,16 @@ var eraseCookie = function (name) {
  */
 var saveGame = async function (gameInfo) {
   try {
-    let user = getCookie("user");
-    console.log(user);
-    if (user) {
-      const body = {
-        gameDetails: {
-          _type: gameInfo.type,
-          _score: gameInfo.score,
-          _playedBy: user.userId,
-          _playedAt: new Date(),
-        },
-      };
-      const data = await fetchData("/api/games", body, "POST", undefined);
-      console.log(data);
-    } else {
-      console.error("user not authenticated");
-    }
+    const body = {
+      gameDetails: {
+        _type: gameInfo.type,
+        _score: gameInfo.score,
+        _playedBy: gameInfo.playedBy,
+        _playedAt: gameInfo.playedAt,
+      },
+    };
+    const data = await fetchData("/api/games", body, "POST", undefined);
+    console.log(data);
   } catch (err) {
     console.error(err);
   }

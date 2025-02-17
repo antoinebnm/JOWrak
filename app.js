@@ -19,7 +19,7 @@ const app = express();
  */
 app.use(compression()); // Compress all routes
 
-app.use(morgan("dev"));
+app.use(morgan("dev")); // console log
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -74,14 +74,25 @@ app.use(
   })
 );
 
+/**
+ *
+ * TODO Create logger mw
+ *
+ */
 // Set up a write stream for logging to a file
 const accessLogStream = fs.createWriteStream(
   path.join(__dirname, "logs", "access.log"),
   { flags: "a" }
 );
 
+const latestLogStream = fs.createWriteStream(
+  path.join(__dirname, "logs", "latest.log"),
+  { flags: "w" }
+);
+
 // Use morgan middleware for HTTP request logging
-app.use(morgan("combined", { stream: accessLogStream }));
+app.use(morgan("common", { stream: accessLogStream }));
+app.use(morgan("combined", { stream: latestLogStream }));
 
 // Custom middleware for user activity logging
 app.use((req, res, next) => {

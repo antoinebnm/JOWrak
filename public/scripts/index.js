@@ -130,6 +130,7 @@ loadNewGame();
 // }
 
 function run(timeLimit = null) {
+  eraseCookie("gameDetails");
   let interval, score, filledCharacters;
   let timeSpent = 0;
   let gameStarted = null;
@@ -207,10 +208,20 @@ function run(timeLimit = null) {
         startButton.hidden = false;
         timeDiv.textContent = "Partie terminée !";
 
+        /**
+         * @const {id, token, name}
+         */
+        const isUserCo = getCookie("user");
         const gameInfo = {};
         gameInfo["type"] = "typeSpeed";
         gameInfo["score"] = score;
-        saveGame(gameInfo); // Save game in mongo or cookie depends on user auth
+        gameInfo["playedAt"] = new Date();
+        if (isUserCo) {
+          gameInfo["playedBy"] = isUserCo.userId;
+          saveGame(gameInfo); // Save game in mongo
+        } else {
+          setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
+        }
         return;
       }
       currentChar.nextElementSibling.classList.add("current");
