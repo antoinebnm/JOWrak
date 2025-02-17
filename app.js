@@ -38,11 +38,6 @@ app.use(
   })
 );
 
-// Add helmet to the middleware chain.
-// Set CSP headers to allow our Bootstrap and Jquery to be served
-//const helmet = require("helmet");
-//app.use(helmet());
-
 // Set up rate limiter: max requests per windowMs
 const RateLimit = require("express-rate-limit");
 const limiter = RateLimit({
@@ -111,11 +106,22 @@ app.use((req, res, next) => {
 const router = require("./public/router/routes");
 app.use("/", router);
 
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self'");
-  res.setHeader("Strict-Transport-Security", "max-age=31536000");
-  next();
-});
+app.disable("x-powered-by");
+// Add helmet to the middleware chain.
+const helmet = require("helmet");
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: ["'self'"],
+      },
+    },
+    strictTransportSecurity: {
+      maxAge: 31536000,
+    },
+  })
+);
 
 const isAuthorized = require("./middlewares/isAuthorized");
 const apiUsers = require("./api/users");
