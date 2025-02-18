@@ -5,6 +5,12 @@ const scoreDiv = document.getElementById("scoreDiv");
 const timeDiv = document.getElementById("time");
 const startButton = document.getElementById("startGameButton");
 
+const logs = logsContainer.getElementsByTagName("span");
+const logsDir = {};
+for (let i = 0; i < logs.length; i++) {
+  logsDir[logs[i].id] = logs[i];
+}
+
 let totalOffset = 0;
 /**
  * Offset target in pixels
@@ -64,8 +70,8 @@ function round(x, n) {
 // TODO: Define Net WPM, Gross WPM, Accurate Accuracy (no corrected mistakes)
 function getWPM(numOfChar, timeTaken) {
   // 7chars words + space, timeTaken in seconds
-  //numOfChar -= 1;
-  numOfChar /= 8; // characters to words
+  numOfChar = (numOfChar + 1) / 8; // characters to words
+  console.log(numOfChar);
   if (timeTaken == 0) timeTaken = 1;
   timeTaken /= 60; // seconds to minutes
   return round(numOfChar / timeTaken, 2);
@@ -75,6 +81,13 @@ function getScore(wpm, accuracy) {
   return round(wpm * accuracy, 2);
 }
 
+/**
+ *  Returns characters typed in total and correctly
+ * @param {HTMLElement} parent
+ * @param {string} target
+ * @param {array} options
+ * @returns {object}
+ */
 function getAccuracy(parent, target, options) {
   let correct = 0;
   let counter = 0;
@@ -100,6 +113,9 @@ function loadNewGame(NoW = 1) {
   } else window.location.reload();
 
   offsetChildren(typeText, "span", typeText.offsetWidth / 2);
+
+  logsDir["log_totalwords"].textContent = `${NoW}`;
+  logsDir["log_totalchars"].textContent = `${NoW * 8 - 1}`;
 }
 
 /**
@@ -117,8 +133,9 @@ function run(timeLimit = null) {
 
   eraseCookie("gameDetails");
 
-  let interval, score, filledCharacters;
+  let counter, filledCharacters;
   let timeSpent = 0;
+  let score = 0;
 
   typeBox.classList = "focused";
   let gameStarted = true;
@@ -131,21 +148,31 @@ function run(timeLimit = null) {
   typeBox.hidden = false;
   typeBox.focus();
 
-  interval = setInterval(() => {
+  let interval = setInterval(() => {
     if (!_typing) return;
     if (!timeLimit) timeDiv.textContent = "Game in progress...";
     else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
 
-    timeSpent++;
     filledCharacters = getAccuracy(typeText, "span", ["correct", "incorrect"]);
     let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
     score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
     scoreDiv.textContent = isNaN(score) ? 0 : score;
-  }, 1000);
+  }, 200);
+
+  let logging = setInterval(() => {
+    let typedChars = getAccuracy(typeText, "span", ["correct", "incorrect"]);
+    let accuracy = round(typedChars.correct / typedChars.total, 2);
+    logsDir["log_typedchars"].textContent = `${typedChars.total}`;
+    logsDir["log_rw_chars"].textContent =
+      `${typedChars.correct}/${typedChars.total - typedChars.correct}`;
+    logsDir["log_accuracy"].textContent = `${accuracy * 100}%`;
+    logsDir["log_timer"].textContent =
+      `${round(timeSpent, 0)}sec / ${round(timeSpent / 60, 2)}min`;
+  }, 200);
 
   typeBox.addEventListener("keydown", function (event) {
     if (!gameStarted) return;
-    if (!_typing) _typing = true;
+
     let key;
     key = event.key; // The actual key pressed
     if (key == " ") key = "&nbsp;";
@@ -171,6 +198,14 @@ function run(timeLimit = null) {
       return;
     }
 
+    if (!_typing) {
+      _typing = true;
+
+      counter = setInterval(() => {
+        timeSpent += 0.25;
+      }, 250);
+    }
+
     if (key == "Backspace") {
       if (currentChar.previousElementSibling) {
         currentChar.removeAttribute("class");
@@ -191,8 +226,10 @@ function run(timeLimit = null) {
         gameStarted = false;
         _typing = false;
         typeBox.classList["focused"] = false;
-        clearInterval(interval); // Arrêter la mise à jour du temps
-        //typeBox.hidden = true;
+
+        clearInterval(counter); // Arrêter la mise à jour du temps
+        clearInterval(interval);
+        clearInterval(logging);
 
         startButton.textContent = "Play again ?";
         startButton.hidden = false;

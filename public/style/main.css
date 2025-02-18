@@ -294,3 +294,38 @@ footer {
 footer.banner section {
   width: 100%;
 }
+
+#logs_arrow {
+  position: absolute;
+  top: 1.6rem;
+  left: 8rem;
+}
+
+#logs {
+  position: absolute;
+  display: block;
+  text-align: end;
+
+  line-height: 1rem;
+  top: 3rem;
+  left: 3rem;
+
+  visibility: collapse;
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 5px;
+}
+
+.right {
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}

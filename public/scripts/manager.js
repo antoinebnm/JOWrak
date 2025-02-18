@@ -23,6 +23,17 @@ const fields = {
   confirmpwdField: document.getElementById("confirmpwd"),
 };
 
+const logsArrow = document.getElementById("logs_arrow");
+const logsContainer = document.getElementById("logs");
+
+logsArrow.addEventListener("click", () => {
+  logsArrow.classList.toggle("right");
+  logsArrow.classList.toggle("down");
+  if (logsContainer.style.visibility == "visible")
+    logsContainer.style.visibility = "collapse";
+  else logsContainer.style.visibility = "visible";
+});
+
 async function preload() {
   try {
     const sid = getCookie("sid") || null;
