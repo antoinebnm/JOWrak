@@ -11,6 +11,8 @@ for (let i = 0; i < logs.length; i++) {
   logsDir[logs[i].id] = logs[i];
 }
 
+const xWords = 5;
+
 let totalOffset = 0;
 /**
  * Offset target in pixels
@@ -68,32 +70,45 @@ function round(x, n) {
 }
 
 // TODO: Define Net WPM, Gross WPM, Accurate Accuracy (no corrected mistakes)
-function getWPM(numOfChar, timeTaken) {
-  // 7chars words + space, timeTaken in seconds
+/**
+ * Calculate Gross WPM
+ * @param {number} numOfChar
+ * @param {number} timeTaken
+ * @returns {number}
+ */
+function grossWPM(numOfChar, timeTaken) {
   numOfChar = (numOfChar + 1) / 8; // characters to words
-  if (timeTaken == 0) timeTaken = 1;
+  if (timeTaken == 0) timeTaken = 1; // fix timer error (0)
   timeTaken /= 60; // seconds to minutes
-  return round(numOfChar / timeTaken, 2);
+  return numOfChar / timeTaken;
 }
 
+/**
+ *
+ * @param {number} wpm
+ * @param {numer} accuracy
+ * @returns {number} score
+ */
 function getScore(wpm, accuracy) {
-  return round(wpm * accuracy, 2);
+  return wpm * accuracy;
 }
 
 /**
  *  Returns characters typed in total and correctly
  * @param {HTMLElement} parent
  * @param {string} target
- * @param {array} options
+ * @param {string} options
  * @returns {object}
  */
-function getAccuracy(parent, target, options) {
+function getTypedChars(parent, target) {
   let correct = 0;
   let counter = 0;
+
   parent.querySelectorAll(target).forEach((el) => {
-    if (options.includes(el.className)) counter += 1;
+    if (["correct", "incorrect"].includes(el.className)) counter += 1;
     if (el.className == "correct") correct += 1;
   });
+
   return { total: counter, correct: correct };
 }
 
@@ -121,18 +136,18 @@ function loadNewGame(NoW = 1) {
  * True when first page load/refresh, then set to false
  */
 let pageReload = true;
-loadNewGame();
+loadNewGame(xWords);
 /**
  * Main function to run and manage the game
  * @param {number} timeLimit in seconds (optional)
  */
 function run(timeLimit = null) {
-  if (!pageReload) loadNewGame();
+  if (!pageReload) loadNewGame(xWords);
   else pageReload = false;
 
   eraseCookie("gameDetails");
 
-  let interval, logging, counter, filledCharacters;
+  let interval, logging, counter;
   let timeSpent = 0;
   let score = 0;
 
@@ -152,21 +167,25 @@ function run(timeLimit = null) {
     if (!timeLimit) timeDiv.textContent = "Game in progress...";
     else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
 
-    filledCharacters = getAccuracy(typeText, "span", ["correct", "incorrect"]);
-    let accuracy = round(filledCharacters.correct / filledCharacters.total, 2);
-    score = getScore(getWPM(filledCharacters.total, timeSpent), accuracy);
-    scoreDiv.textContent = isNaN(score) ? 0 : score;
+    let typedChars = getTypedChars(typeText, "span");
+    let accuracy = typedChars.correct / typedChars.total;
+    score = getScore(grossWPM(typedChars.total, timeSpent), accuracy);
+    console.log(round(grossWPM(typedChars.total, timeSpent), 2));
+    scoreDiv.textContent = isNaN(score) ? 0 : round(score, 2);
   }, 200);
 
   logging = setInterval(() => {
-    let typedChars = getAccuracy(typeText, "span", ["correct", "incorrect"]);
-    let accuracy = round(typedChars.correct / typedChars.total, 2);
+    let typedChars = getTypedChars(typeText, "span");
+    let accuracy = typedChars.correct / typedChars.total;
     logsDir["log_typedchars"].textContent = `${typedChars.total}`;
     logsDir["log_rw_chars"].textContent =
       `${typedChars.correct}/${typedChars.total - typedChars.correct}`;
-    logsDir["log_accuracy"].textContent = `${accuracy * 100}%`;
+    logsDir["log_accuracy"].textContent = `${round(accuracy * 100, 0)}%`;
     logsDir["log_timer"].textContent =
-      `${round(timeSpent, 0)}sec / ${round(timeSpent / 60, 2)}min`;
+      `${round(timeSpent, 2)}sec / ${round(timeSpent / 60, 2)}min`;
+    logsDir["log_grosswpm"].textContent =
+      `${round(grossWPM(typedChars.total, timeSpent), 2)}`;
+    logsDir["log_netwpm"].textContent = `.`;
   }, 200);
 
   typeBox.addEventListener("keydown", function (event) {
@@ -192,8 +211,9 @@ function run(timeLimit = null) {
       _typing = true;
 
       counter = setInterval(() => {
-        timeSpent += 0.25;
-      }, 250);
+        timeSpent = round(timeSpent + 0.01, 2);
+        console.log(timeSpent, "sec");
+      }, 10);
     }
 
     if (key == "Backspace") {
@@ -218,7 +238,7 @@ function run(timeLimit = null) {
         setTimeout(() => {
           clearInterval(interval);
           clearInterval(logging);
-        }, 500);
+        }, 200);
 
         clearInterval(counter); // Arrêter la mise à jour du temps
 
