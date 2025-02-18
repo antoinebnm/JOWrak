@@ -71,7 +71,6 @@ function round(x, n) {
 function getWPM(numOfChar, timeTaken) {
   // 7chars words + space, timeTaken in seconds
   numOfChar = (numOfChar + 1) / 8; // characters to words
-  console.log(numOfChar);
   if (timeTaken == 0) timeTaken = 1;
   timeTaken /= 60; // seconds to minutes
   return round(numOfChar / timeTaken, 2);
@@ -133,7 +132,7 @@ function run(timeLimit = null) {
 
   eraseCookie("gameDetails");
 
-  let counter, filledCharacters;
+  let interval, logging, counter, filledCharacters;
   let timeSpent = 0;
   let score = 0;
 
@@ -148,7 +147,7 @@ function run(timeLimit = null) {
   typeBox.hidden = false;
   typeBox.focus();
 
-  let interval = setInterval(() => {
+  interval = setInterval(() => {
     if (!_typing) return;
     if (!timeLimit) timeDiv.textContent = "Game in progress...";
     else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
@@ -159,7 +158,7 @@ function run(timeLimit = null) {
     scoreDiv.textContent = isNaN(score) ? 0 : score;
   }, 200);
 
-  let logging = setInterval(() => {
+  logging = setInterval(() => {
     let typedChars = getAccuracy(typeText, "span", ["correct", "incorrect"]);
     let accuracy = round(typedChars.correct / typedChars.total, 2);
     logsDir["log_typedchars"].textContent = `${typedChars.total}`;
@@ -183,15 +182,6 @@ function run(timeLimit = null) {
 
     const currentChar = document.getElementsByClassName("current")[0];
 
-    // Log the results
-    /*
-  console.log({
-    key: key,
-    valid: isAlphabetic || isSpecial,
-    target: currentChar.innerHTML,
-  });
-  */
-
     // Optionally prevent the default action for non-alphabetic keys
     if (!isAlphabetic && !isSpecial) {
       event.preventDefault(); // Stops the event from propagating further
@@ -214,22 +204,27 @@ function run(timeLimit = null) {
         offsetChildren(typeText, "span", currentChar.offsetWidth);
       }
     } else {
-      currentChar.classList.remove("current");
+      currentChar.classList.remove("current"); // Switch current class to next item
 
       if (checkChar(currentChar.innerHTML, key)) {
         currentChar.classList.add("correct");
       } else {
         currentChar.classList.add("incorrect");
       }
-      offsetChildren(typeText, "span", -currentChar.offsetWidth);
+      offsetChildren(typeText, "span", -currentChar.offsetWidth); // Offset text by "current character" size
+
+      // Case where last item is typed
       if (!currentChar.nextElementSibling) {
+        setTimeout(() => {
+          clearInterval(interval);
+          clearInterval(logging);
+        }, 500);
+
+        clearInterval(counter); // Arrêter la mise à jour du temps
+
         gameStarted = false;
         _typing = false;
         typeBox.classList["focused"] = false;
-
-        clearInterval(counter); // Arrêter la mise à jour du temps
-        clearInterval(interval);
-        clearInterval(logging);
 
         startButton.textContent = "Play again ?";
         startButton.hidden = false;
@@ -239,10 +234,11 @@ function run(timeLimit = null) {
          * @const {id, token, name}
          */
         const isUserCo = getCookie("user");
-        const gameInfo = {};
-        gameInfo["type"] = "typeSpeed";
-        gameInfo["score"] = score;
-        gameInfo["playedAt"] = new Date();
+        const gameInfo = {
+          type: "typeSpeed",
+          score: score,
+          playedAt: new Date(),
+        };
         if (isUserCo) {
           gameInfo["playedBy"] = isUserCo.userId;
           saveGame(gameInfo); // Save game in mongo
