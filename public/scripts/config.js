@@ -53,7 +53,7 @@ var fetchData = async (
 /**
  * Cookie getter
  * @param {string} name
- * @returns {string} String
+ * @returns {object} Object
  */
 var getCookie = function (name) {
   var cookies = document.cookie.split(";");
@@ -88,8 +88,6 @@ var eraseCookie = function (name) {
  * @async
  */
 var saveGame = async function (gameInfo) {
-  console.log(typeof gameInfo);
-  console.log(gameInfo);
   try {
     const body = {
       gameDetails: {
@@ -100,7 +98,7 @@ var saveGame = async function (gameInfo) {
       },
     };
     const data = await fetchData("/api/games", body, "POST", undefined);
-    console.log(data);
+    //console.log(data);
   } catch (err) {
     console.error(err);
   }
