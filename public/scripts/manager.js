@@ -40,7 +40,6 @@ async function preload() {
       toggleAuthButtons();
     }
   } catch (error) {
-    console.log(error);
     eraseCookie("sid");
     eraseCookie("user");
     eraseCookie("gameDetails");
@@ -168,23 +167,29 @@ authForm.addEventListener("submit", async (event) => {
       alert("A user with this name already exist !");
       throw new Error("Unique user login required !");
     }
-    if (data?.userInfo) {
-      setCookie("user", data.userInfo, [1, 0, 0, 0]);
-      const gameDetails = getCookie("gameDetails");
-      if (gameDetails) gameDetails["playedBy"] = data.userInfo.userId;
-      const res = await saveGame(gameDetails);
-      console.log(res);
-      if (res.ok) window.location.reload();
+    if (data?.user) {
+      setCookie("user", data.user, [1, 0, 0, 0]);
+      toggleUserProfil(data.user.displayName);
+      // Clear fields and classes when all cases are verified
+      clearFields(Object.values(fields));
+      switchFields([fields.displaynameField, fields.confirmpwdField], true);
+      fields.usernameField.classList.remove("wrong");
+      fields.passwordField.classList.remove("wrong");
+      fields.confirmpwdField.classList.remove("wrong");
+
+      closePopup();
+
+      // Case where user logs in AFTER playing the game -> uses cookie
+      const gameDetails = JSON.parse(getCookie("gameDetails"));
+      if (gameDetails) {
+        gameDetails["playedBy"] = data.user.userId;
+        saveGame(gameDetails).then(() => {
+          eraseCookie("gameDetails");
+          alert("Successfully saved the game");
+          timeDiv.textContent = "Game ended !";
+        });
+      }
     }
-
-    // Clear fields and classes when all cases are verified
-    clearFields(Object.values(fields));
-    switchFields([fields.displaynameField, fields.confirmpwdField], true);
-    fields.usernameField.classList.remove("wrong");
-    fields.passwordField.classList.remove("wrong");
-    fields.confirmpwdField.classList.remove("wrong");
-
-    closePopup();
   } catch (error) {
     if (error.message.startsWith("Passwords")) {
       fields.confirmpwdField.className = "wrong";

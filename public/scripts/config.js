@@ -88,8 +88,6 @@ var eraseCookie = function (name) {
  * @async
  */
 var saveGame = async function (gameInfo) {
-  console.log(typeof gameInfo);
-  console.log(gameInfo);
   try {
     const body = {
       gameDetails: {
@@ -99,8 +97,7 @@ var saveGame = async function (gameInfo) {
         _playedAt: gameInfo.playedAt,
       },
     };
-    const data = await fetchData("/api/games", body, "POST", undefined);
-    console.log(data);
+    await fetchData("/api/games", body, "POST", undefined);
   } catch (err) {
     console.error(err);
   }

@@ -297,10 +297,9 @@ function run(timeLimit = null) {
           playedAt: new Date(),
         };
         if (isUserCo) {
-          gameInfo["playedBy"] = isUserCo.userId;
+          gameInfo["playedBy"] = JSON.parse(isUserCo).userId;
           saveGame(gameInfo); // Save game in mongo
         } else {
-          timeDiv.textContent += " Login to save your game score.";
           setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
         }
 
@@ -308,13 +307,15 @@ function run(timeLimit = null) {
           clearInterval(counter); // Arrêter la mise à jour du temps
           clearInterval(core);
 
-          gameStarted = false;
           _typing = false;
+          gameStarted = false;
           typeBox.classList["focused"] = false;
 
           startButton.textContent = "Play again ?";
           startButton.hidden = false;
           timeDiv.textContent = "Game ended !";
+          if (!isUserCo)
+            timeDiv.textContent += " Login to save your game score.";
         }, deltaT);
 
         return;
