@@ -228,7 +228,6 @@ function run(timeLimit = null) {
     else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
 
     let typedChars = getTypedChars(typeText, "span");
-    console.log(`IN: ${getTypedChars(typeText, "span")}`);
     let accuracy = round(typedChars.correct / typedChars.total, 2);
 
     score = round(
@@ -275,9 +274,8 @@ function run(timeLimit = null) {
         currentChar.previousElementSibling.classList.add("current");
         offsetChildren(typeText, "span", currentChar.offsetWidth);
       }
-    } else {
-      currentChar.classList.remove("current"); // Switch current class to next item
-
+    } else if (currentChar) {
+      // Avoid error log when current is undefined
       if (checkChar(currentChar.innerHTML, key)) {
         currentChar.classList.add("correct");
       } else {
@@ -285,18 +283,10 @@ function run(timeLimit = null) {
       }
       offsetChildren(typeText, "span", -currentChar.offsetWidth); // Offset text by "current character" size
 
-      console.log(key);
-      console.log(`OUT: ${getTypedChars(typeText, "span")}`);
+      currentChar.classList.remove("current");
+
       // Case where last item is typed
       if (!currentChar.nextElementSibling) {
-        gameStarted = false;
-        _typing = false;
-        typeBox.classList["focused"] = false;
-
-        startButton.textContent = "Play again ?";
-        startButton.hidden = false;
-        timeDiv.textContent = "Game ended !";
-
         /**
          * @const {id, token, name}
          */
@@ -314,10 +304,23 @@ function run(timeLimit = null) {
           setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
         }
 
-        clearInterval(core);
-        clearInterval(counter); // Arrêter la mise à jour du temps
+        setTimeout(() => {
+          clearInterval(counter); // Arrêter la mise à jour du temps
+          clearInterval(core);
+
+          gameStarted = false;
+          _typing = false;
+          typeBox.classList["focused"] = false;
+
+          startButton.textContent = "Play again ?";
+          startButton.hidden = false;
+          timeDiv.textContent = "Game ended !";
+        }, deltaT);
+
         return;
       }
+
+      // Switch current class to next item
       currentChar.nextElementSibling.classList.add("current");
     }
   });
