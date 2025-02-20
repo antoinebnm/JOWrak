@@ -323,3 +323,73 @@ footer.banner section {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+/* ===================== Code 1: Global CSS ===================== */
+
+/* 📍 Tablets and small desktops (≤1024px) */
+@media (max-width: 1024px) {
+  .banner {
+    padding: 0.5rem 1rem;
+  }
+
+  .auth-buttons {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+/* 📍 Tablets and large phones (≤768px) */
+@media (max-width: 768px) {
+  .banner {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .home-button {
+    font-size: 1rem;
+  }
+
+  .auth-buttons {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .footer {
+    font-size: 0.9rem;
+  }
+}
+
+/* 📍 Small phones (≤480px) */
+@media (max-width: 480px) {
+  .banner {
+    padding: 0.5rem;
+  }
+
+  .home-button {
+    font-size: 0.9rem;
+  }
+
+  .auth-buttons {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .content {
+    padding: 0.5rem;
+  }
+
+  .footer {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+}

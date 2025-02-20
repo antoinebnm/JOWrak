@@ -5,7 +5,18 @@ const scoreDiv = document.getElementById("scoreDiv");
 const timeDiv = document.getElementById("time");
 const startButton = document.getElementById("startGameButton");
 
+const logsArrow = document.getElementById("logs_arrow");
+const logsContainer = document.getElementById("logs");
 const logs = logsContainer.getElementsByTagName("span");
+
+logsArrow.addEventListener("click", () => {
+  logsArrow.classList.toggle("right");
+  logsArrow.classList.toggle("down");
+  if (logsContainer.style.visibility == "visible")
+    logsContainer.style.visibility = "collapse";
+  else logsContainer.style.visibility = "visible";
+});
+
 const logsDir = {};
 for (let i = 0; i < logs.length; i++) {
   logsDir[logs[i].id] = logs[i];

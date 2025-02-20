@@ -104,3 +104,87 @@ thead th:last-child {
 .table-fill tbody .separator {
   background: var(--Dark-Gray, #333);
 }
+
+/* ===================== Responsive Design ===================== */
+
+/* Table plus compacte sur tablettes */
+@media (max-width: 1024px) {
+  .table-fill {
+    font-size: 24px;
+  }
+
+  .table-title {
+    font-size: 2.5rem;
+  }
+
+  .table-fill thead th {
+    font-size: 1.8rem;
+    padding: 1rem 3rem;
+  }
+
+  .table-fill tbody tr td {
+    font-size: 1.3rem;
+    padding: 1rem 2rem;
+  }
+}
+
+/* Adaptation pour mobiles */
+@media (max-width: 768px) {
+  .table-fill {
+    font-size: 18px;
+    flex-direction: column;
+  }
+
+  .table-title {
+    font-size: 2rem;
+  }
+
+  .table-fill thead {
+    display: none; /* Cache l'en-tête sur mobile */
+  }
+
+  .table-fill tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .table-fill tbody tr {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  .table-fill tbody tr td {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  /* Ajout d'une pseudo-classe pour afficher le nom de la colonne sur mobile */
+  .table-fill tbody tr td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: #555;
+  }
+}
+
+/* Ultra petits écrans */
+@media (max-width: 480px) {
+  .table-title {
+    font-size: 1.5rem;
+  }
+
+  .table-fill tbody tr td {
+    font-size: 1rem;
+  }
+}

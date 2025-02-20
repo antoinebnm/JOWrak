@@ -93,3 +93,68 @@
     border-left: 2px solid transparent;
   }
 }
+
+/* ===================== Code 2: Game CSS ===================== */
+
+/* 📍 Tablets and small desktops (≤1024px) */
+@media (max-width: 1024px) {
+  .game-info p {
+    font-size: 1.15rem;
+  }
+
+  .input-container #typeBox {
+    min-width: 14rem;
+    max-width: 22rem;
+  }
+
+  #typeText {
+    min-width: 14rem;
+    max-width: 22rem;
+    padding: 0.8rem;
+  }
+}
+
+/* 📍 Tablets and large phones (≤768px) */
+@media (max-width: 768px) {
+  .game-info {
+    text-align: center;
+  }
+
+  .game-info p {
+    font-size: 1rem;
+  }
+
+  .input-container {
+    align-items: center;
+  }
+
+  .input-container #typeBox {
+    min-width: 12rem;
+    max-width: 18rem;
+  }
+
+  #typeText {
+    min-width: 12rem;
+    max-width: 18rem;
+    padding: 0.6rem;
+  }
+}
+
+/* 📍 Small phones (≤480px) */
+@media (max-width: 480px) {
+  .game-info p {
+    font-size: 0.9rem;
+  }
+
+  .input-container #typeBox {
+    min-width: 10rem;
+    max-width: 16rem;
+  }
+
+  #typeText {
+    min-width: 10rem;
+    max-width: 16rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
