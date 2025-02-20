@@ -43,6 +43,7 @@ async function preload() {
     console.log(error);
     eraseCookie("sid");
     eraseCookie("user");
+    eraseCookie("gameDetails");
     window.location.reload();
   }
 }
@@ -169,7 +170,11 @@ authForm.addEventListener("submit", async (event) => {
     }
     if (data?.userInfo) {
       setCookie("user", data.userInfo, [1, 0, 0, 0]);
-      toggleUserProfil(data.userInfo.displayName);
+      const gameDetails = getCookie("gameDetails");
+      if (gameDetails) gameDetails["playedBy"] = data.userInfo.userId;
+      const res = await saveGame(gameDetails);
+      console.log(res);
+      if (res.ok) window.location.reload();
     }
 
     // Clear fields and classes when all cases are verified

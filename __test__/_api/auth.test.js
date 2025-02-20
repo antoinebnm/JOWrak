@@ -45,7 +45,7 @@ describe("Authentication", () => {
         })
         .expect(201);
 
-      expect(response.body.userInfo).toBeDefined();
+      expect(response.body.user).toBeDefined();
       expect(response.body.message).toBe("User registered successfully");
       const userInDb = await User.findOne({ "credentials.login": "testUser" });
       expect(userInDb).toBeDefined();
@@ -80,8 +80,8 @@ describe("Authentication", () => {
         .set({ Login: "testUser", Password: "test123" })
         .expect(200);
 
-      expect(response.body.userInfo).toBeDefined();
-      expect(response.body.userInfo.displayName).toBe("TestUser");
+      expect(response.body.user).toBeDefined();
+      expect(response.body.user.displayName).toBe("TestUser");
     });
 
     it("should throw an error when user already logged in", async () => {
@@ -91,7 +91,7 @@ describe("Authentication", () => {
         .set({ Login: "testUser", Password: "test123" })
         .expect(200);
 
-      const validToken = preQuery.body.userInfo.OAuthToken;
+      const validToken = preQuery.body.user.OAuthToken;
 
       // Mock valid token in request session
       sessionManager.setMockSessionData({ user: { OAuthToken: validToken } });

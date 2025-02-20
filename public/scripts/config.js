@@ -88,6 +88,8 @@ var eraseCookie = function (name) {
  * @async
  */
 var saveGame = async function (gameInfo) {
+  console.log(typeof gameInfo);
+  console.log(gameInfo);
   try {
     const body = {
       gameDetails: {

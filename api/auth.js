@@ -50,7 +50,7 @@ auth.post("/register", async (req, res) => {
       req.session.save(function (err) {
         if (err) return next(err);
         res.status(201).json({
-          userInfo: req.session.user,
+          user: req.session.user,
           message: "User registered successfully",
         });
       });
@@ -121,7 +121,7 @@ auth.post("/login", async (req, res, next) => {
       // load does not happen before session is saved
       req.session.save(function (err) {
         if (err) return next(err);
-        res.status(200).json({ userInfo: req.session.user });
+        res.status(200).json({ user: req.session.user });
       });
     });
   } catch (error) {
