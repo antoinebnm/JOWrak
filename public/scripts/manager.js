@@ -40,6 +40,7 @@ async function preload() {
       toggleAuthButtons();
     }
   } catch (error) {
+    console.log(error);
     eraseCookie("sid");
     eraseCookie("user");
     eraseCookie("gameDetails");
@@ -161,17 +162,19 @@ authForm.addEventListener("submit", async (event) => {
       undefined,
       headers
     );
-
     if (data?.message == "Response status: 401") {
       throw new Error("Invalid credentials !");
     } else if (data?.message == "Response status: 500") {
       alert("A user with this name already exist !");
       throw new Error("Unique user login required !");
     }
-
-    if (data?.user) {
-      setCookie("user", data.user, [1, 0, 0, 0]);
-      toggleUserProfil(data.user.displayName);
+    if (data?.userInfo) {
+      setCookie("user", data.userInfo, [1, 0, 0, 0]);
+      const gameDetails = getCookie("gameDetails");
+      if (gameDetails) gameDetails["playedBy"] = data.userInfo.userId;
+      const res = await saveGame(gameDetails);
+      console.log(res);
+      if (res.ok) window.location.reload();
     }
 
     // Clear fields and classes when all cases are verified
@@ -182,17 +185,6 @@ authForm.addEventListener("submit", async (event) => {
     fields.confirmpwdField.classList.remove("wrong");
 
     closePopup();
-
-    const gameDetails = JSON.parse(getCookie("gameDetails"));
-    console.log(gameDetails);
-    console.log(JSON.parse(data.user).userId);
-    if (gameDetails) {
-      gameDetails["playedBy"] = JSON.parse(data.user).userId;
-      console.log(gameDetails);
-      saveGame(gameDetails).then(() => {
-        eraseCookie("gameDetails");
-      });
-    }
   } catch (error) {
     if (error.message.startsWith("Passwords")) {
       fields.confirmpwdField.className = "wrong";

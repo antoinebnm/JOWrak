@@ -297,7 +297,7 @@ function run(timeLimit = null) {
           playedAt: new Date(),
         };
         if (isUserCo) {
-          gameInfo["playedBy"] = JSON.parse(isUserCo).userId;
+          gameInfo["playedBy"] = isUserCo.userId;
           saveGame(gameInfo); // Save game in mongo
         } else {
           timeDiv.textContent += " Login to save your game score.";
