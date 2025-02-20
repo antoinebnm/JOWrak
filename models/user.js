@@ -15,7 +15,6 @@ const userSchema = new Schema(
       password: { type: String, required: true },
     },
     addedAt: { type: Date, required: true },
-    gamesPlayed: [{ type: Schema.Types.ObjectId, ref: "Game" }],
   },
   { versionKey: false }
 );
