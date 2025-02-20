@@ -11,9 +11,22 @@ for (let i = 0; i < logs.length; i++) {
   logsDir[logs[i].id] = logs[i];
 }
 
-const xWords = 5;
-
+/**
+ * Time incrementation value (in ms)
+ */
+const deltaT = 100;
+/**
+ * Number of words to type
+ */
+const xWords = 2;
+/**
+ * True when first page load/refresh, then set to false
+ */
+let pageReload = true;
 let totalOffset = 0;
+
+loadNewGame(xWords);
+
 /**
  * Offset target in pixels
  * @param {HTMLElement} parent
@@ -62,6 +75,12 @@ function checkChar(char, key) {
   return char === key;
 }
 
+/**
+ * Uses Math.round
+ * @param {number} x Number to round (0<.5<1)
+ * @param {number} n Number of decimals
+ * @returns
+ */
 function round(x, n) {
   return (
     Math.round((x + Number.EPSILON) * parseInt("1" + "0".repeat(n))) /
@@ -69,18 +88,35 @@ function round(x, n) {
   );
 }
 
-// TODO: Define Net WPM, Gross WPM, Accurate Accuracy (no corrected mistakes)
+// TODO: Define Accurate Accuracy (all mistakes made intead of only uncorrected mistakes)
 /**
  * Calculate Gross WPM
- * @param {number} numOfChar
+ * @param {number} totalOfChar
  * @param {number} timeTaken
  * @returns {number}
  */
-function grossWPM(numOfChar, timeTaken) {
-  numOfChar = (numOfChar + 1) / 8; // characters to words
+function grossWPM(totalOfChar, timeTaken) {
+  let typedWords = (totalOfChar + 1) / 8; // characters to words
+
   if (timeTaken == 0) timeTaken = 1; // fix timer error (0)
-  timeTaken /= 60; // seconds to minutes
-  return numOfChar / timeTaken;
+  let timeInMin = timeTaken / 60; // seconds to minutes
+
+  return typedWords / timeInMin;
+}
+
+/**
+ * Calculate Net WPM
+ * @param {object} typedChars
+ * @param {number} timeTaken
+ * @returns {number}
+ */
+function netWPM(typedChars, timeTaken) {
+  let errorsToWord = (typedChars.total + 1 - typedChars.correct) / 8;
+
+  if (timeTaken == 0) timeTaken = 1; // fix timer error (0)
+  let timeInMin = timeTaken / 60; // seconds to minutes
+
+  return grossWPM(typedChars.total, timeTaken) - errorsToWord / timeInMin;
 }
 
 /**
@@ -112,6 +148,30 @@ function getTypedChars(parent, target) {
   return { total: counter, correct: correct };
 }
 
+var logger = (typedChars, accuracy, timeSpent) => {
+  logsDir["log_typedchars"].textContent = `${typedChars.total}`;
+  logsDir["log_rw_chars"].textContent =
+    `${typedChars.correct}/${typedChars.total - typedChars.correct}`;
+  logsDir["log_accuracy"].textContent = `${round(accuracy * 100, 2)}%`;
+  logsDir["log_timer"].textContent =
+    `${timeSpent}sec / ${round(timeSpent / 60, 2)}min`;
+  logsDir["log_grosswpm"].textContent =
+    `${round(grossWPM(typedChars.total, timeSpent), 2)}`;
+  logsDir["log_netwpm"].textContent =
+    `${round(netWPM(typedChars, timeSpent), 2)}`;
+};
+
+var frontRender = (_typing) => {
+  typeBox.classList = "focused";
+  startButton.hidden = true;
+
+  if (!_typing) timeDiv.textContent = "Start typing to begin the timer";
+
+  typeText.value = "";
+  typeBox.hidden = false;
+  typeBox.focus();
+};
+
 /**
  * Load a new game using wordList
  * @param {number} NoW Number of Word to include (integer)
@@ -133,60 +193,46 @@ function loadNewGame(NoW = 1) {
 }
 
 /**
- * True when first page load/refresh, then set to false
- */
-let pageReload = true;
-loadNewGame(xWords);
-/**
  * Main function to run and manage the game
  * @param {number} timeLimit in seconds (optional)
  */
 function run(timeLimit = null) {
+  // Checks if first page load or if User pressed 'PlayAgain' button
   if (!pageReload) loadNewGame(xWords);
   else pageReload = false;
 
-  eraseCookie("gameDetails");
-
-  let interval, logging, counter;
+  let core, counter; // intervals
   let timeSpent = 0;
   let score = 0;
 
-  typeBox.classList = "focused";
   let gameStarted = true;
   let _typing = false;
-  startButton.hidden = true;
 
-  if (!_typing) timeDiv.textContent = "Start typing to begin the timer";
+  eraseCookie("gameDetails");
+  frontRender(_typing);
 
-  typeText.value = "";
-  typeBox.hidden = false;
-  typeBox.focus();
-
-  interval = setInterval(() => {
+  core = setInterval(() => {
     if (!_typing) return;
     if (!timeLimit) timeDiv.textContent = "Game in progress...";
     else timeDiv.textContent = `Time spent typing: ${timeSpent}'`;
 
     let typedChars = getTypedChars(typeText, "span");
-    let accuracy = typedChars.correct / typedChars.total;
-    score = getScore(grossWPM(typedChars.total, timeSpent), accuracy);
-    console.log(round(grossWPM(typedChars.total, timeSpent), 2));
-    scoreDiv.textContent = isNaN(score) ? 0 : round(score, 2);
-  }, 200);
+    console.log(`IN: ${getTypedChars(typeText, "span")}`);
+    let accuracy = round(typedChars.correct / typedChars.total, 2);
 
-  logging = setInterval(() => {
-    let typedChars = getTypedChars(typeText, "span");
-    let accuracy = typedChars.correct / typedChars.total;
-    logsDir["log_typedchars"].textContent = `${typedChars.total}`;
-    logsDir["log_rw_chars"].textContent =
-      `${typedChars.correct}/${typedChars.total - typedChars.correct}`;
-    logsDir["log_accuracy"].textContent = `${round(accuracy * 100, 0)}%`;
-    logsDir["log_timer"].textContent =
-      `${round(timeSpent, 2)}sec / ${round(timeSpent / 60, 2)}min`;
-    logsDir["log_grosswpm"].textContent =
-      `${round(grossWPM(typedChars.total, timeSpent), 2)}`;
-    logsDir["log_netwpm"].textContent = `.`;
-  }, 200);
+    score = round(
+      getScore(grossWPM(typedChars.total, round(timeSpent, 2)), accuracy),
+      0
+    );
+    scoreDiv.textContent = isNaN(score) ? 0 : score;
+
+    logger(typedChars, accuracy, round(timeSpent, 2));
+  }, deltaT);
+
+  counter = setInterval(() => {
+    if (!_typing) return;
+    timeSpent = round(timeSpent + round(deltaT / 1000, 2), 2);
+  }, deltaT);
 
   typeBox.addEventListener("keydown", function (event) {
     if (!gameStarted) return;
@@ -209,11 +255,6 @@ function run(timeLimit = null) {
 
     if (!_typing) {
       _typing = true;
-
-      counter = setInterval(() => {
-        timeSpent = round(timeSpent + 0.01, 2);
-        console.log(timeSpent, "sec");
-      }, 10);
     }
 
     if (key == "Backspace") {
@@ -233,15 +274,10 @@ function run(timeLimit = null) {
       }
       offsetChildren(typeText, "span", -currentChar.offsetWidth); // Offset text by "current character" size
 
+      console.log(key);
+      console.log(`OUT: ${getTypedChars(typeText, "span")}`);
       // Case where last item is typed
       if (!currentChar.nextElementSibling) {
-        setTimeout(() => {
-          clearInterval(interval);
-          clearInterval(logging);
-        }, 200);
-
-        clearInterval(counter); // Arrêter la mise à jour du temps
-
         gameStarted = false;
         _typing = false;
         typeBox.classList["focused"] = false;
@@ -266,6 +302,9 @@ function run(timeLimit = null) {
           timeDiv.textContent += " Login to save your game score.";
           setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
         }
+
+        clearInterval(core);
+        clearInterval(counter); // Arrêter la mise à jour du temps
         return;
       }
       currentChar.nextElementSibling.classList.add("current");
