@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JOW Games — 7 letters' words Speed Typing Game</title>
+    <script src="../scripts/config.js" defer></script>
+    <script src="../scripts/account.js" defer></script>
+    <link href="../style/main.css" rel="stylesheet" />
+    <link href="../src/js.ico" rel="icon" />
+  </head>
+  <body>
+    <header class="banner">
+      <div id="homeButton">
+        <a href="/"
+          ><img src="../src/house_icon.png" alt="Home button" height="64"
+        /></a>
+      </div>
+      <section>
+        <h1>JOW Games - User Prowfile</h1>
+      </section>
+      <div id="accountMenu">
+        <span id="userProfil"></span>
+        <div class="dropdown-menu">
+          <button id="accProfile" class="btn" onclick="myAccount(this)">
+            Profile
+          </button>
+          <button id="accSettings" class="btn" onclick="myAccount(this)">
+            Settings
+          </button>
+          <button id="accLogout" class="btn">Log out</button>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <div id="profile" class="main-box hidden">
+        <h1>Profile</h1>
+      </div>
+      <div id="settings" class="main-box hidden">
+        <h1>Settings</h1>
+      </div>
+    </main>
+    <footer class="banner">
+      <section>
+        <p>JavaScript project</p>
+      </section>
+    </footer>
+  </body>
+</html>

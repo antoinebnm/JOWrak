@@ -13,6 +13,26 @@ var myRedirect = function (redirectUrl) {
   f.submit();
 };
 
+const backButton = document.getElementById("backButton") || undefined;
+if (backButton) {
+  backButton.addEventListener("click", () => {
+    window.location.href = "/";
+  });
+}
+
+var myAccount = (element) => {
+  if (element.id == "accProfile") window.location.href = "/account?profile";
+  if (element.id == "accSettings") window.location.href = "/account?settings";
+};
+
+const accLogout = document.getElementById("accLogout");
+accLogout.addEventListener("click", () => {
+  fetchData("/api/auth/logout").then(() => {
+    alert("You are now disconnected.\nYou will be redirect to the home page.");
+    window.location.href = "/";
+  });
+});
+
 /**
  * Custom fetch method
  * @param {string} url      URI element

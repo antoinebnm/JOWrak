@@ -1,3 +1,5 @@
+preload();
+
 // formatage
 const typeBox = document.getElementById("typeBox");
 const typeText = document.getElementById("typeText");

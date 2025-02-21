@@ -1,3 +1,5 @@
+preload();
+
 let tbody = document.querySelector("tbody");
 let thead = document.querySelector("thead");
 

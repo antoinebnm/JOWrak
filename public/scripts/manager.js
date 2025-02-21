@@ -12,8 +12,6 @@ const accountMenu = document.getElementById("accountMenu");
 const userProfil = document.getElementById("userProfil");
 const switchAuth = document.getElementById("switchAuth");
 
-const accLogout = document.getElementById("accLogout");
-
 const pwdEye = document.getElementById("pwdEye");
 
 const fields = {
@@ -46,8 +44,6 @@ async function preload() {
     window.location.reload();
   }
 }
-
-preload();
 
 function clearFields(array) {
   array.forEach((element) => {
@@ -119,12 +115,6 @@ closeBtn.addEventListener("click", closePopup);
 
 let PwdVisibility = false;
 pwdEye.addEventListener("click", () => togglePwdVisibility());
-
-accLogout.addEventListener("click", () => {
-  fetchData("/api/auth/logout").then(() => {
-    window.location.reload();
-  });
-});
 
 // Fermer le popup si on clique en dehors du contenu
 window.addEventListener("click", (event) => {
@@ -198,6 +188,5 @@ authForm.addEventListener("submit", async (event) => {
       fields.usernameField.className = "wrong";
       fields.passwordField.className = "wrong";
     }
-    //myRedirect("/");
   }
 });

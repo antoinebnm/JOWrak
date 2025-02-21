@@ -46,6 +46,9 @@ header.banner {
   width: auto;
   margin-top: auto;
   cursor: pointer;
+
+  transform: translateY(0.5rem);
+  z-index: 1;
 }
 
 #accountMenu #userProfil {
@@ -115,6 +118,10 @@ header.banner {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.main-box.hidden {
+  display: none;
 }
 
 .section-title {
@@ -304,7 +311,7 @@ footer.banner section {
   top: 3rem;
   left: 3rem;
 
-  /* visibility: collapse; */
+  visibility: collapse;
 }
 
 .arrow {

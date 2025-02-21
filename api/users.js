@@ -52,29 +52,13 @@ api.put("/", async (req, res, next) => {
   try {
     const { userId, attribute, value } = req.body.updateData;
 
-    if (attribute == "gamesPlayed") {
-      let gamesHistory = await User.findOne({
-        _id: userId,
-      }).get("gamesPlayed");
-
-      const storedGame = await Game.findById(value);
-      gamesHistory.push(storedGame);
-
-      await User.updateOne(
-        { _id: userId },
-        {
-          $set: { gamesPlayed: gamesHistory },
-        }
-      );
-    } else {
-      await User.findOneAndUpdate(
-        { _id: userId },
-        { [attribute]: value },
-        { returnOriginal: false }
-      ).then(() => {
-        res.status(200).json({ message: "User document updated" });
-      });
-    }
+    await User.findOneAndUpdate(
+      { _id: userId },
+      { [attribute]: value },
+      { returnOriginal: false }
+    ).then(() => {
+      res.status(200).json({ message: "User document updated" });
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json();
