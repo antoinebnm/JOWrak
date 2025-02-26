@@ -124,10 +124,12 @@ function grossWPM(totalOfChar, timeTaken) {
  * @returns {number}
  */
 function netWPM(typedChars, timeTaken) {
-  let errorsToWord = (typedChars.total + 1 - typedChars.correct) / 8;
+  let errorsToWord = (typedChars.total - typedChars.correct) / 8;
 
   if (timeTaken == 0) timeTaken = 1; // fix timer error (0)
   let timeInMin = timeTaken / 60; // seconds to minutes
+  console.log(grossWPM(typedChars.total, timeTaken));
+  console.log(errorsToWord);
 
   return grossWPM(typedChars.total, timeTaken) - errorsToWord / timeInMin;
 }
