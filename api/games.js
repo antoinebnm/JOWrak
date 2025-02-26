@@ -58,15 +58,11 @@ api.post("/", async (req, res, next) => {
  *
  * TODO: opti -> search par arg user/game plutot que id
  */
-api.get("/:id", async (req, res, next) => {
+api.get("/:id?", async (req, res, next) => {
   try {
-    if (await User.findOne({ _id: req.params.id })) {
-      res
-        .status(200)
-        .json(await User.findOne({ _id: req.params.id }, { gamesPlayed }));
-    } else {
-      res.status(200).json(await Game.findOne({ _id: req.params.id }));
-    }
+    const gameDoc = await Game.findOne({ _id: req.params.id });
+    if (gameDoc) res.status(200).json(gameDoc);
+    else res.status(200).json(await Game.find());
   } catch (error) {
     res.status(error.status).json({ error });
   }
