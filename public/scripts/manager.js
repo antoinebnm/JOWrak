@@ -21,6 +21,10 @@ const fields = {
   confirmpwdField: document.getElementById("confirmpwd"),
 };
 
+if (window.location.pathname != "/" && getCookie("gameDetails")) {
+  eraseCookie("gameDetails");
+}
+
 async function preload() {
   try {
     const sid = getCookie("sid") || null;
