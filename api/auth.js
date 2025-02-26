@@ -22,7 +22,7 @@ auth.post("/register", async (req, res) => {
         },
       },
       "POST",
-      undefined
+      { Authorization: "admin" }
     );
 
     //userId => Payload res
