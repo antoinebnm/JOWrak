@@ -62,8 +62,17 @@ var toggleFiltreScore = (count) => {
 };
 
 var toggleFiltreDate = (count) => {
-  if (count) filters.date.src.src = "../assets/filterArrowBot.png";
-  else filters.date.src.src = "../assets/filterArrowTop.png";
+  const mappedGames = games.map(([id, game]) => [
+    id,
+    { ...game, playedAt: new Date(game.playedAt).getTime() },
+  ]);
+  if (count) {
+    filters.date.src.src = "../assets/filterArrowBot.png";
+    render(filter(mappedGames, "playedAt", "desc"));
+  } else {
+    filters.date.src.src = "../assets/filterArrowTop.png";
+    render(filter(mappedGames, "playedAt", "asc"));
+  }
 };
 
 function formatDate(date) {
@@ -131,6 +140,6 @@ var updateTable = (data) => {
     games.push(best);
   });
   setTimeout(() => {
-    render(games);
+    render(filter(games, "score", "desc"));
   }, 100);
 };
