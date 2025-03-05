@@ -128,8 +128,6 @@ function netWPM(typedChars, timeTaken) {
 
   if (timeTaken == 0) timeTaken = 1; // fix timer error (0)
   let timeInMin = timeTaken / 60; // seconds to minutes
-  console.log(grossWPM(typedChars.total, timeTaken));
-  console.log(errorsToWord);
 
   return grossWPM(typedChars.total, timeTaken) - errorsToWord / timeInMin;
 }
@@ -176,7 +174,7 @@ var logger = (typedChars, accuracy, timeSpent) => {
     `${round(netWPM(typedChars, timeSpent), 2)}`;
 };
 
-var frontRender = (_typing) => {
+function render(_typing) {
   typeBox.classList = "focused";
   startButton.hidden = true;
 
@@ -185,7 +183,7 @@ var frontRender = (_typing) => {
   typeText.value = "";
   typeBox.hidden = false;
   typeBox.focus();
-};
+}
 
 /**
  * Load a new game using wordList
@@ -224,7 +222,7 @@ function run(timeLimit = null) {
   let _typing = false;
 
   eraseCookie("gameDetails");
-  frontRender(_typing);
+  render(_typing);
 
   core = setInterval(() => {
     if (!_typing) return;

@@ -40,6 +40,12 @@ accLogout.addEventListener("click", () => {
  * @param {string} method   POST | GET | PUT | DELETE
  * @param {object} headers  Request headers
  * @returns Json argument
+ *
+ * Examples:
+ * ```js
+ *    const data = await fetchData('/api/users', undefined, 'GET', undefined);
+ *    fetchData('/api/users', undefined, 'GET', undefined).then(callback);
+ * ```
  */
 var fetchData = async (
   url = "/",

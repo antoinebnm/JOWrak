@@ -62,7 +62,10 @@ api.get("/:id?", async (req, res, next) => {
   try {
     const gameDoc = await Game.findOne({ _id: req.params.id });
     if (gameDoc) res.status(200).json(gameDoc);
-    else res.status(200).json(await Game.find());
+    else
+      res
+        .status(200)
+        .json(await Game.find({}).populate("playedBy", "displayName").exec());
   } catch (error) {
     res.status(error.status).json({ error });
   }

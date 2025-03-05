@@ -20,9 +20,9 @@ thead.innerHTML = header;
 try {
   fetchData("api/games", undefined, "GET", { Authorization: "admin" }).then(
     (data) => {
-      console.log(data);
       if (data) {
         if (data.name == "Error") return;
+        console.log("data ", data);
         updateTable(data);
       } else return;
     }
@@ -36,35 +36,66 @@ function formatDate(date) {
   return +array[2] + " " + array[1] + " " + array[3];
 }
 
+function filter(array, arg = null, order = "asc") {
+  let callback;
+  switch (order) {
+    case "asc":
+      if (arg) callback = (a, b) => a.arg - b.arg;
+      callback = (a, b) => a - b;
+      break;
+
+    case "desc":
+      if (arg) callback = (a, b) => b.arg - a.arg;
+      callback = (a, b) => b - a;
+      break;
+
+    default:
+      callback = null;
+      break;
+  }
+  return array.sort(callback);
+}
+
+/**
+ * Get Personal Best (per users)
+ * @param {object} data
+ * @returns {object}
+ */
 var getPB = (data) => {
   const bestPerUser = {};
   data.forEach((game) => {
-    const userId = game.playedBy;
+    const userId = game.playedBy._id;
     if (!bestPerUser[userId]) bestPerUser[userId] = game;
     else if (bestPerUser[userId].score < game.score) bestPerUser[userId] = game;
   });
   return bestPerUser;
 };
 
-var updateTable = (data) => {
+function render(data) {
   let rows = ``;
-  Object.entries(getPB(data)).forEach(async (best, rank) => {
-    fetchData(`/api/users/${best[0]}`, undefined, "GET", {
-      Authorization: "admin",
-    }).then((user) => {
-      best[1].username = user.displayName;
-
-      console.log(best);
-      rows += `
+  data.forEach((game, index) => {
+    rows += `
     <tr>
-        <th>${rank + 1}</th>
-        <th>${best[1].username}</th>
-        <th>${best[1].score}</th>
-        <th>${formatDate(best[1].playedAt)}</th>
+        <th>${index + 1}</th>
+        <th>${game[1].playedBy.displayName}</th>
+        <th>${game[1].score}</th>
+        <th>${formatDate(game[1].playedAt)}</th>
     </tr>
     `;
-      console.log(rows);
-      tbody.innerHTML = rows;
-    });
   });
+
+  tbody.innerHTML = rows;
+  return;
+}
+
+// TODO: get all users instead of each per each
+var updateTable = (data) => {
+  const games = [];
+  Object.entries(getPB(data)).forEach((best) => {
+    games.push(best);
+    console.log("best ", best);
+  });
+  setTimeout(() => {
+    render(games);
+  }, 100);
 };
