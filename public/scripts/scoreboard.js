@@ -9,8 +9,8 @@ var header = `
     <tr>
         <th class="fixed_w">${_categories.rank}</th>
         <th>${_categories.name}</th>
-        <th class="fixed_w">${_categories.score}<img id="filterScore" class="filterArrow" src="../assets/filterArrow.svg"></th>
-        <th>${_categories.date}<img id="filterDate" class="filterArrow" src="../assets/filterArrow.svg"></th>
+        <th class="fixed_w">${_categories.score}<img id="filterScore" class="filterArrow" onclick="filterMenu(this);" src="../assets/filterArrowBot.png"></th>
+        <th>${_categories.date}<img id="filterDate" class="filterArrow" onclick="filterMenu(this);" src="../assets/filterArrowBot.png"></th>
     </tr>
     `;
 
@@ -22,7 +22,6 @@ try {
     (data) => {
       if (data) {
         if (data.name == "Error") return;
-        console.log("data ", data);
         updateTable(data);
       } else return;
     }
@@ -30,6 +29,42 @@ try {
 } catch (err) {
   console.error(err);
 }
+
+let filters = {
+  score: { count: 0, src: document.getElementById("filterScore") },
+  date: { count: 0, src: document.getElementById("filterDate") },
+};
+function filterMenu(html) {
+  switch (html.id) {
+    case "filterScore":
+      toggleFiltreScore(filters.score.count++);
+      if (filters.score.count == 2) filters.score.count = 0;
+      break;
+
+    case "filterDate":
+      toggleFiltreDate(filters.date.count++);
+      if (filters.date.count == 2) filters.date.count = 0;
+      break;
+
+    default:
+      break;
+  }
+}
+
+var toggleFiltreScore = (count) => {
+  if (count) {
+    filters.score.src.src = "../assets/filterArrowBot.png";
+    render(filter(games, "score", "desc"));
+  } else {
+    filters.score.src.src = "../assets/filterArrowTop.png";
+    render(filter(games, "score", "asc"));
+  }
+};
+
+var toggleFiltreDate = (count) => {
+  if (count) filters.date.src.src = "../assets/filterArrowBot.png";
+  else filters.date.src.src = "../assets/filterArrowTop.png";
+};
 
 function formatDate(date) {
   let array = new Date(date).toDateString().split(" ");
@@ -40,19 +75,20 @@ function filter(array, arg = null, order = "asc") {
   let callback;
   switch (order) {
     case "asc":
-      if (arg) callback = (a, b) => a.arg - b.arg;
-      callback = (a, b) => a - b;
+      if (arg) callback = (a, b) => a[1][arg] - b[1][arg];
+      else callback = (a, b) => a - b;
       break;
 
     case "desc":
-      if (arg) callback = (a, b) => b.arg - a.arg;
-      callback = (a, b) => b - a;
+      if (arg) callback = (a, b) => b[1][arg] - a[1][arg];
+      else callback = (a, b) => b - a;
       break;
 
     default:
       callback = null;
       break;
   }
+
   return array.sort(callback);
 }
 
@@ -88,12 +124,11 @@ function render(data) {
   return;
 }
 
-// TODO: get all users instead of each per each
+const games = [];
 var updateTable = (data) => {
-  const games = [];
+  games.length = 0;
   Object.entries(getPB(data)).forEach((best) => {
     games.push(best);
-    console.log("best ", best);
   });
   setTimeout(() => {
     render(games);

@@ -14,7 +14,6 @@ try {
 }
 
 const sections = document.getElementsByClassName("main-box");
-console.log(sections);
 
 const getSection = () => {
   return window.location.search.split("?")[1];
