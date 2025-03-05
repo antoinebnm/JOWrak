@@ -7,10 +7,10 @@ const _categories = { rank: "#", name: "Name", score: "Score", date: "Played" };
 
 var header = `
     <tr>
-        <th>${_categories.rank}</th>
+        <th class="fixed_w">${_categories.rank}</th>
         <th>${_categories.name}</th>
-        <th>${_categories.score}</th>
-        <th>${_categories.date}</th>
+        <th class="fixed_w">${_categories.score}<img id="filterScore" class="filterArrow" src="../assets/filterArrow.svg"></th>
+        <th>${_categories.date}<img id="filterDate" class="filterArrow" src="../assets/filterArrow.svg"></th>
     </tr>
     `;
 
@@ -76,10 +76,10 @@ function render(data) {
   data.forEach((game, index) => {
     rows += `
     <tr>
-        <td>${index + 1}</td>
-        <td>${game[1].playedBy.displayName}</td>
-        <td>${game[1].score}</td>
-        <td>${formatDate(game[1].playedAt)}</td>
+        <td style="flex: none; width: 128px;">${index + 1}</td>
+        <td style="flex: 1; ">${game[1].playedBy.displayName}</td>
+        <td style="flex: none; width: 128px;">${game[1].score}</td>
+        <td style="flex: 1; ">${formatDate(game[1].playedAt)}</td>
     </tr>
     `;
   });

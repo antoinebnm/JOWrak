@@ -1,0 +1,36 @@
+<svg width="19" height="37" viewBox="0 0 19 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="19" height="37" fill="#F5F5F5"/>
+<g id="Scoreboard - Logged out" clip-path="url(#clip0_0_1)">
+<rect width="1728" height="1117" transform="translate(-997 -448)" fill="#F4F4F4"/>
+<g id="Main section">
+<g id="Frame 5" filter="url(#filter0_d_0_1)">
+<rect x="-733" y="-218" width="1200" height="500" rx="10" fill="white" shape-rendering="crispEdges"/>
+<g id="Table">
+<g id="Header">
+<g id="Scoreboard Header">
+<g id="Rectangle">
+<rect width="301.333" height="69" transform="translate(-209.667 -16)" fill="#333333"/>
+<path id="Arrow 1" d="M9.5 0.5L0.262396 16.5H18.7376L9.5 0.5ZM9.5 36.5L18.7376 20.5H0.262396L9.5 36.5ZM9.5 0.5L0.262396 16.5H18.7376L9.5 0.5ZM9.5 36.5L18.7376 20.5H0.262396L9.5 36.5Z" fill="white"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_1" x="-748" y="-233" width="1230" height="530" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="7.5"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+</filter>
+<clipPath id="clip0_0_1">
+<rect width="1728" height="1117" fill="white" transform="translate(-997 -448)"/>
+</clipPath>
+</defs>
+</svg>
