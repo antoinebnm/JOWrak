@@ -44,10 +44,10 @@ header.banner {
   align-items: center;
 
   width: auto;
-  margin-top: auto;
+  height: 0;
   cursor: pointer;
 
-  transform: translateY(0.5rem);
+  transform: translateY(-10px);
   z-index: 1;
 }
 
@@ -60,7 +60,6 @@ header.banner {
   color: #fff;
   text-align: center;
   font-size: 1.25rem;
-  margin-top: 1rem;
 }
 
 .dropdown-menu {
@@ -70,21 +69,18 @@ header.banner {
   align-items: center;
 
   opacity: 0;
-  transform: translateY(
-    -10px
-  ); /* Déplacer légèrement vers le haut pour l'animation */
+  transform: translateY(-10px);
   transition:
     opacity 0.3s ease,
     transform 0.3s ease; /* Animation sur 0.3s */
   visibility: hidden; /* Cache l'élément initialement */
+
   background-color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-  z-index: 1;
 }
 
-#accountMenu:hover .dropdown-menu,
-#accountMenu.active .dropdown-menu {
+#accountMenu:hover .dropdown-menu {
   opacity: 1;
   transform: translateY(0); /* Menu revient à sa position initiale */
   visibility: visible; /* Rend le menu visible */
