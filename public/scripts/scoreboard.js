@@ -76,10 +76,10 @@ function render(data) {
   data.forEach((game, index) => {
     rows += `
     <tr>
-        <th>${index + 1}</th>
-        <th>${game[1].playedBy.displayName}</th>
-        <th>${game[1].score}</th>
-        <th>${formatDate(game[1].playedAt)}</th>
+        <td>${index + 1}</td>
+        <td>${game[1].playedBy.displayName}</td>
+        <td>${game[1].score}</td>
+        <td>${formatDate(game[1].playedAt)}</td>
     </tr>
     `;
   });
