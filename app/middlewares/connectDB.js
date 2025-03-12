@@ -20,7 +20,7 @@ var connectDB = () => {
       .then(() => console.log("Connexion à MongoDB réussie !"))
       .catch(() => {
         console.log("Connexion à MongoDB échouée !");
-        throw new Error(mongoose.Error);
+        throw new Error(mongoose.MongooseError);
       });
   }
 };

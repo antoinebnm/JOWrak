@@ -52,7 +52,7 @@ app.use(express.static(path.join(__dirname, "../public/dist")));
 
 // Catch-all handler to serve index.html
 app.get("*", (req, res) => {
-  //res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../public/dist", "index.html"));
 });
 
 const allowedOrigins = [
@@ -160,7 +160,7 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   //res.send(`<h1>Error ${err.status} - ${err.message}</h1>`);
-  res.sendFile("./notfound.html", { root: __dirname });
+  res.sendFile("../public/static/notfound.html", { root: __dirname });
 });
 
 /**

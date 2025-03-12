@@ -2,7 +2,7 @@
   "name": "dev-learning",
   "version": "2.0.4",
   "description": "Learning Repo for Languages, Methods, Coding",
-  "main": "scripts/index.js",
+  "main": "server.js",
   "scripts": {
     "test": "JWT_SECRET=jwtsecret jest --reporters='default' --detectOpenHandles --verbose --runInBand",
     "start": "node ./bin/www",
