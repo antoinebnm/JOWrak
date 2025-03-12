@@ -1,12 +1,13 @@
 .leaderboard-box {
-  min-height: 10rem;
+  min-height: 31.25rem;
+  margin-bottom: 4rem;
 }
 
 .table-fill {
   display: flex;
   flex-direction: column;
 
-  height: 12.3125rem;
+  height: auto;
   margin-top: 2rem;
 
   font-family: "Arial", arial, sans-serif;

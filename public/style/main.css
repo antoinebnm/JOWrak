@@ -98,9 +98,10 @@ header.banner {
 
 .main-box {
   display: flex;
-  height: 31.25rem;
+  height: auto;
   max-width: 75rem;
   padding: 4.5rem;
+
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
