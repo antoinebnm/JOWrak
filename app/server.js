@@ -47,8 +47,13 @@ const limiter = RateLimit({
 // Apply rate limiter to all requests
 app.use(limiter);
 
-// public access resource setup
-app.use(express.static(path.join(__dirname, "public")));
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../public/dist")));
+
+// Catch-all handler to serve index.html
+app.get("*", (req, res) => {
+  //res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 const allowedOrigins = [
   "http://localhost:3000", // Local frontend
@@ -103,7 +108,7 @@ app.use((req, res, next) => {
 /**
  * Router Setup
  */
-const router = require("./public/router/routes");
+const router = require("./router/routes");
 app.use("/", router);
 
 app.disable("x-powered-by");

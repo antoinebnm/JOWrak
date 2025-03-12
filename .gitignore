@@ -2,8 +2,6 @@
 .vscode
 .env
 
-
 node_modules
 
-src/wordList.txt
 logs
