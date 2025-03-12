@@ -375,6 +375,10 @@ footer.banner section {
 
 /* 📍 Small phones (≤480px) */
 @media (max-width: 480px) {
+  body {
+    width: -webkit-fill-available;
+  }
+
   .banner {
     padding: 0.5rem;
   }

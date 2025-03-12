@@ -116,7 +116,7 @@
 
   .table-fill tbody tr td {
     font-size: 1.3rem;
-    padding: 1rem 2rem;
+    padding: 1rem;
   }
 }
 
@@ -131,10 +131,6 @@
     font-size: 2rem;
   }
 
-  .table-fill thead {
-    display: none; /* Cache l'en-tête sur mobile */
-  }
-
   .table-fill tbody {
     display: flex;
     flex-direction: column;
@@ -143,7 +139,6 @@
 
   .table-fill tbody tr {
     display: flex;
-    flex-direction: column;
     width: 100%;
     margin-bottom: 1rem;
     background: #fff;
