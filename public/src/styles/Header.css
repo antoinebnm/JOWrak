@@ -1,0 +1,30 @@
+/* Style pour la banniere */
+.banner {
+  position: fixed;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 1rem;
+  width: 100%;
+
+  background-color: #333;
+  color: #fff;
+}
+
+header.banner {
+  top: 0;
+  height: 6rem;
+}
+
+.banner #homeButton {
+  position: relative;
+  height: 64px;
+  padding: 0;
+  filter: invert(100%);
+}
+
+.banner #homeButton:hover {
+  filter: invert(100%) drop-shadow(0rem 0rem 0.1rem #fff);
+}
