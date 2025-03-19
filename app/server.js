@@ -15,11 +15,21 @@ require("dotenv").config();
 const app = express();
 
 /**
+ * CLI Setup
+ */
+const CLI = require("./cli");
+if (process.argv.includes("cli")) {
+  CLI.startCLI();
+}
+
+/**
  * Middleware Setup
  */
 app.use(compression()); // Compress all routes
 
-app.use(morgan("dev")); // console log
+if (process.argv.includes("log")) {
+  app.use(morgan("dev")); // console log
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
