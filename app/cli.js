@@ -33,27 +33,35 @@ async function promptUser() {
     {
       type: "input",
       name: "action",
-      message: "Type 'o' to open the app, 'q' to quit:\n",
+      message:
+        "Type 'o' to open the app, 'c' to close the app and wait for a restart, 'q' to quit:\n",
     },
   ]);
 
   if (action === "o") {
     console.log("🌍 Opening the app...");
-    await openURL("http://localhost:3000");
+    const _uri =
+      `${process.env.URI ? process.env.URI : "http://localhost"}` +
+      `${process.env.PORT ? ":" + process.env.PORT : ""}`;
+    await openURL(_uri);
+  } else if (action === "c") {
+    console.log(
+      "Clean App closing, waiting for a file modification to restart."
+    );
+    process.exit(0);
   } else if (action === "q") {
     console.log("🛑 Exiting CLI...");
-    console.log(process.pid);
-    console.log(process.ppid);
     process.kill(process.ppid, "SIGTERM");
+    process.exit(0);
   }
 
-  console.log("\n🚀 Use the commands below to control the app.");
-  promptUser();
+  startCLI();
 }
 
 async function startCLI() {
   clear();
   await printFiglet("JOWrak 's    CLI");
+  console.log("\n🚀 Use the commands below to control the app.");
   promptUser();
 }
 
