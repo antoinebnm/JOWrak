@@ -21,12 +21,6 @@ function printFiglet(text) {
   });
 }
 
-process.on("SIGUSR2", function () {
-  gracefulShutdown(function () {
-    process.kill(process.pid, "SIGTERM");
-  });
-});
-
 // Function to handle user inputs
 async function promptUser() {
   const { action } = await inquirer.prompt([
@@ -42,7 +36,7 @@ async function promptUser() {
     console.log("🌍 Opening the app...");
     const _uri =
       `${process.env.URI ? process.env.URI : "http://localhost"}` +
-      `${process.env.PORT ? ":" + process.env.PORT : ""}`;
+      `${process.env.PORT ? ":" + process.env.PORT : ":3000"}`;
     await openURL(_uri);
   } else if (action === "c") {
     console.log(
