@@ -61,13 +61,17 @@ function authButtons() {
         id="loginButton"
         label="Log in"
         className="btn"
-        handleClick={() => {}}
+        callback={(e) => {
+          console.log(e.current);
+        }}
       />
       <Button
         id="registerButton"
         label="Register"
         className="btn"
-        handleClick={() => {}}
+        callback={(e) => {
+          console.log(e.current);
+        }}
       />
     </div>
   );

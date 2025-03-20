@@ -4,7 +4,7 @@ import "../styles/Button.css";
 
 export default function Button({
   id,
-  label = "",
+  label = "Button",
   className = "",
   callback = () => {},
 }) {

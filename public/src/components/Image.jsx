@@ -2,9 +2,9 @@ import { useRef } from "react";
 
 export default function Image({
   id,
-  src = "",
+  src,
   alt = "",
-  height = 90,
+  height = 64,
   className = "",
   callback = () => {},
 }) {

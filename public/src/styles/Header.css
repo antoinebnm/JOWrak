@@ -1,6 +1,6 @@
 /* Style pour la banniere */
 .banner {
-  position: fixed;
+  position: relative;
   display: flex;
   text-align: center;
   align-items: center;
@@ -14,7 +14,6 @@
 }
 
 header.banner {
-  top: 0;
   height: 6rem;
 }
 
