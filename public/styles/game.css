@@ -1,0 +1,160 @@
+/*
+        Main container
+*/
+.game-info p {
+  margin: 1rem 0;
+  font-size: 1.25rem;
+}
+
+.game-info .input-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 1rem;
+}
+
+.input-container #typeBox {
+  display: flex;
+
+  overflow: hidden;
+  outline: none;
+
+  width: auto;
+  min-width: 16.5rem;
+  max-width: 24rem;
+  min-height: 2rem;
+  height: fit-content;
+
+  background-color: #d6eaff;
+  border: none;
+  border-radius: 0.4rem;
+
+  cursor: text;
+}
+
+#typeText {
+  display: flex;
+  text-align: center;
+
+  user-select: none;
+
+  width: auto;
+  min-width: 16.5rem;
+  max-width: 24rem;
+  min-height: 2rem;
+  height: fit-content;
+
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.input-container #typeBox:hover {
+  background-color: #bcdcff;
+}
+
+.input-container #typeBox:focus.focused {
+  background-color: #bcdcff;
+}
+
+#typeText span.incorrect {
+  background: rgba(255, 0, 0, 0.5);
+  color: #fff;
+}
+
+#typeText span.correct {
+  background: rgba(35, 222, 35, 0.5);
+  color: #333;
+}
+
+.input-container #typeBox #typeText span {
+  position: relative;
+}
+
+.input-container #typeBox:focus.focused #typeText span.current {
+  border-left: 2px solid black;
+  margin-left: -2px;
+  animation: 1s ease 0s infinite normal none running cursorBlink;
+}
+
+@keyframes cursorBlink {
+  0%,
+  50% {
+    border-left: 2px solid black;
+  }
+  51%,
+  100% {
+    border-left: 2px solid transparent;
+  }
+}
+
+/* ===================== Code 2: Game CSS ===================== */
+
+/* 📍 Tablets and small desktops (≤1024px) */
+@media (max-width: 1024px) {
+  .game-info p {
+    font-size: 1.15rem;
+  }
+
+  .input-container #typeBox {
+    min-width: 14rem;
+    max-width: 22rem;
+  }
+
+  #typeText {
+    min-width: 14rem;
+    max-width: 22rem;
+    padding: 0.8rem;
+  }
+}
+
+/* 📍 Tablets and large phones (≤768px) */
+@media (max-width: 768px) {
+  .game-info {
+    text-align: center;
+  }
+
+  .game-info p {
+    font-size: 1rem;
+  }
+
+  .input-container {
+    align-items: center;
+  }
+
+  .input-container #typeBox {
+    min-width: 12rem;
+    max-width: 18rem;
+  }
+
+  #typeText {
+    min-width: 12rem;
+    max-width: 18rem;
+    padding: 0.6rem;
+  }
+}
+
+/* 📍 Small phones (≤480px) */
+@media (max-width: 480px) {
+  .game-info p {
+    font-size: 0.9rem;
+  }
+
+  .input-container #typeBox {
+    min-width: 10rem;
+    max-width: 16rem;
+  }
+
+  #typeText {
+    min-width: 10rem;
+    max-width: 16rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}

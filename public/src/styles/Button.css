@@ -1,0 +1,35 @@
+.btn {
+  padding: 1rem 2rem;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+
+  border: none;
+  border-radius: 0.3125rem;
+  background: var(--Electric-Blue, #007bff);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.btn:hover {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    #007bff;
+}
+
+.btn:active {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    #007bff;
+  box-shadow: none;
+}

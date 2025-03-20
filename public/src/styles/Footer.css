@@ -1,0 +1,8 @@
+footer.banner {
+  position: fixed;
+  bottom: 0;
+}
+
+footer section {
+  width: 100%;
+}

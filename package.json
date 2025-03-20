@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "chalk": "^5.4.1",
+    "clear": "^0.1.0",
+    "clui": "^0.3.6",
+    "configstore": "^7.0.0",
+    "figlet": "^1.8.0",
+    "inquirer": "^12.4.3",
+    "minimist": "^1.2.8",
+    "open": "^10.1.0"
+  }
+}
