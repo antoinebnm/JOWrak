@@ -1,5 +1,5 @@
 import "../styles/Leaderboard.css";
 
 export default function Leaderboard() {
-  return <div>Leaderboard</div>;
+  return <div className="main-box">Leaderboard</div>;
 }

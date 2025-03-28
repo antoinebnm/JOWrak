@@ -18,7 +18,7 @@ export default function Header() {
           window.location.href = "/";
         }}
       />
-      <Title text="JOW Games - JOWrak" size="1.8rem" />
+      <Title text="JOW Games - JOWrak" size="h2" />
       <AuthUserSection />
     </header>
   );
