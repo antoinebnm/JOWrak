@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Button from "./Button";
 import Input from "./Input";
@@ -8,6 +8,18 @@ import "../styles/AuthPopup.css";
 
 export default function AuthPopup({ type, onClose }) {
   const popupRef = useRef(null);
+  const [isRegisterPopup, setIsRegisterPopup] = useState(
+    type.toUpperCase() == "REGISTER"
+  );
+  const [pwdView, setPwdView] = useState(false);
+
+  function togglePwdSwitchView() {
+    setPwdView(!pwdView);
+  }
+
+  function togglePopupType() {
+    setIsRegisterPopup(!isRegisterPopup);
+  }
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -35,7 +47,7 @@ export default function AuthPopup({ type, onClose }) {
       <div id="authPopup" className="popup">
         <span id="close-btn">&times;</span>
         <div className="popup-content" ref={popupRef}>
-          <Title text={type.toUpperCase()} size="h2" />
+          <Title text={(isRegisterPopup && "REGISTER") || "LOGIN"} size="h2" />
           <form id="authForm">
             <Input
               type="text"
@@ -49,32 +61,40 @@ export default function AuthPopup({ type, onClose }) {
               id="displayname"
               placeholder="Username"
               autoComplete="username"
-              hidden
+              required={isRegisterPopup}
+              hidden={!isRegisterPopup}
             />
             <Input
-              type="password"
+              type={(pwdView && "text") || "password"}
               id="password"
               placeholder="Password"
               autoComplete="current-password"
               required
             />
             <Button
-              label="Ø"
+              label={(pwdView && "O") || "Ø"}
               id="pwdEye"
               className="pwdEye"
               callback={() => {
-                //TODO: show pwd
+                window.addEventListener("click", (event) => {
+                  event.preventDefault();
+                });
+                togglePwdSwitchView();
               }}
             />
             <Input
-              type="password"
+              type={(pwdView && "text") || "password"}
               id="confirmpwd"
               placeholder="Confirm Password"
               autoComplete="new-password"
-              hidden
+              required={isRegisterPopup}
+              hidden={!isRegisterPopup}
             />
             <Input type="submit" className="btn" value="Submit" />
-            <span id="switchAuth"></span>
+            <span id="switchAuth" onClick={() => togglePopupType()}>
+              {(isRegisterPopup && "Click here to log in") ||
+                "Click here to register"}
+            </span>
           </form>
         </div>
       </div>
