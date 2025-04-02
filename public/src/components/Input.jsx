@@ -3,7 +3,8 @@ export default function Input({
   className,
   type = "text",
   placeholder = null,
-  value = undefined, // Submit?
+  value = undefined,
+  onChange = () => {},
   autoComplete = undefined,
   required = false,
   hidden = false,
@@ -16,6 +17,7 @@ export default function Input({
       placeholder={placeholder}
       autoComplete={autoComplete}
       value={value}
+      onChange={onChange}
       required={required}
       hidden={hidden}
     />
