@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import Button from "./Button";
-import Input from "./Input";
-import Title from "./Title";
+import Button from "../Button";
+import Input from "../Input";
+import Title from "../Title";
 
-import "../styles/AuthPopup.css";
+import "./AuthPopup.css";
 
 export default function AuthPopup({ type, onClose, onLogin }) {
   const popupRef = useRef(null);
@@ -108,11 +108,10 @@ export default function AuthPopup({ type, onClose, onLogin }) {
     } catch (error) {
       const newErrors = {};
       if (error.message.startsWith("Passwords")) {
-        newErrors.confirmpwd = "Passwords do not match";
+        newErrors.password = "Passwords do not match";
       }
       if (error.message.startsWith("Invalid")) {
-        newErrors.username = "Invalid credentials";
-        newErrors.password = "Invalid credentials";
+        newErrors.creds = "Invalid credentials";
       }
       setErrors(newErrors);
     }
@@ -154,7 +153,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
               required
               value={formData.username}
               onChange={(e) => handleInputChange(e)}
-              className={errors.username ? "wrong" : ""}
+              className={errors.creds ? "wrong" : ""}
             />
             {isRegisterPopup && (
               <Input
@@ -177,7 +176,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
               required
               value={formData.password}
               onChange={(e) => handleInputChange(e)}
-              className={errors.password ? "wrong" : ""}
+              className={errors.creds || errors.password ? "wrong" : ""}
             />
             <Button
               label={(pwdView && "O") || "Ø"}
@@ -199,7 +198,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
                 required
                 value={formData.confirmpwd}
                 onChange={(e) => handleInputChange(e)}
-                className={errors.confirmpwd ? "wrong" : ""}
+                className={errors.password ? "wrong" : ""}
               />
             )}
             <Submit />

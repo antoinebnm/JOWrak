@@ -1,10 +1,10 @@
-import AuthUserSection from "./AuthUserSection";
-import Title from "./Title";
-import Image from "./Image";
+import AuthUserSection from "../AuthSection";
+import Title from "../../components/Title";
+import Image from "../../components/Image";
 
-import "../styles/Header.css";
+import "./Header.css";
 
-import homeLogo from "../assets/house_icon.png";
+import homeLogo from "../../assets/house_icon.png";
 
 export default function Header() {
   return (

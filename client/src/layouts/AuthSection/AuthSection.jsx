@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-import AuthPopup from "./AuthPopup";
-import Button from "./Button";
+import AuthPopup from "../../components/AuthPopup";
+import Button from "../../components/Button";
 
-import { getCookie, setCookie, deleteCookie } from "./utils/cookieAgent";
-import fetchData from "./utils/fetchData";
+import {
+  getCookie,
+  setCookie,
+  deleteCookie,
+} from "../../components/utils/cookieAgent";
+import fetchData from "../../components/utils/fetchData";
 
-import "../styles/AuthUserSection.css";
+import "./AuthSection.css";
 
 function myAccount(element) {
   if (element.id == "accProfile") window.location.href = "/account?profile";
@@ -42,7 +46,7 @@ function userProfil(user, handleLogout) {
   );
 }
 
-export default function AuthUserSection() {
+export default function AuthSection() {
   const savedUser = getCookie("user");
   const [user, setUser] = useState(savedUser ? JSON.parse(savedUser) : null);
   const [popupType, setPopupType] = useState(null);

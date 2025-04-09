@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import "../styles/Button.css";
+import "./Button.css";
 
 export default function Button({
   id,

@@ -58,11 +58,11 @@ const limiter = RateLimit({
 app.use(limiter);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../public/dist")));
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Catch-all handler to serve index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
 });
 
 const allowedOrigins = [
@@ -169,8 +169,7 @@ app.use((err, req, res, next) => {
 
   // render the error page
   res.status(err.status || 500);
-  //res.send(`<h1>Error ${err.status} - ${err.message}</h1>`);
-  res.sendFile("../public/static/notfound.html", { root: __dirname });
+  res.send(`<h1>Error ${err.status} - ${err.message}</h1>`);
 });
 
 /**

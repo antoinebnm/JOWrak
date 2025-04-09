@@ -1,5 +1,5 @@
-import Button from "./Button";
-import Title from "./Title";
+import Button from "../../components/Button";
+import Title from "../../components/Title";
 
 export default function NotFound() {
   return (

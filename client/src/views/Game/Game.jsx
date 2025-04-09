@@ -1,4 +1,4 @@
-import "../styles/Game.css";
+import "./Game.css";
 
 export default function Game() {
   return <div className="main-box">Game</div>;
