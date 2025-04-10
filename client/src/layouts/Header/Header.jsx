@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useRef } from "react";
+import Lottie from "lottie-react";
 import { useTheme } from "../../contexts/ThemeContext";
 import themeButton from "../../assets/icons8-themeIcon.json"; // your downloaded file
 
@@ -13,15 +13,14 @@ import homeLogo from "../../assets/house_icon.png";
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
-  const [dotLottie, setDotLottie] = useState(null);
-
-  const dotLottieRefCallback = (dotLottie) => {
-    setDotLottie(dotLottie);
-  };
+  const lottieRef = useRef();
 
   const handleThemeToggle = () => {
     toggleTheme();
-    dotLottie.play();
+    if (lottieRef.current) {
+      lottieRef.current.setDirection(theme === "light" ? -1 : -1); // Reverse if light → dark, else play forward
+      lottieRef.current.play();
+    }
   };
 
   return (
@@ -36,22 +35,15 @@ export default function Header() {
         }}
       />
       <Title text="JOW Games - JOWrak" size="h2" />
-      <section>
-        <div
-          onClick={handleThemeToggle}
-          style={{
-            width: 50,
-            height: 50,
-            filter: "invert(100%)",
-            cursor: "pointer",
-          }}
-        >
-          <DotLottieReact
-            dotLottieRefCallback={dotLottieRefCallback}
-            data={themeButton}
-            segment={theme == "dark" ? [0, 14] : [14, 28]}
-          />
-        </div>
+      <section id="themeSection" onClick={handleThemeToggle}>
+        <Lottie
+          lottieRef={lottieRef}
+          animationData={themeButton}
+          autoplay={false}
+          loop={false}
+          initialSegment={theme === "light" ? [0, 14] : [14, 28]}
+          style={{ filter: "invert(100%)", width: "50px", height: "50px" }}
+        />
         <p>Current theme: {theme}</p>
       </section>
       <AuthSection />
