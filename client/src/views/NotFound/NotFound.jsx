@@ -3,7 +3,7 @@ import Title from "../../components/Title";
 
 export default function NotFound() {
   return (
-    <div className="main-box">
+    <>
       <Title text="Are you lost ?" size="h1" />
       <Title text="There is nothing to see here" size="h3" />
       <Button
@@ -14,6 +14,6 @@ export default function NotFound() {
           window.location.href = "/";
         }}
       />
-    </div>
+    </>
   );
 }

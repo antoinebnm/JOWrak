@@ -36,19 +36,8 @@ body {
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 }
 
-.main-box .all_btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .main-box.hidden {
   display: none;
-}
-
-.section-title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
 }
 
 #switchAuth {
@@ -62,41 +51,6 @@ body {
 
 #switchAuth:hover {
   text-decoration: underline;
-}
-
-#logs_arrow {
-  position: absolute;
-  top: 1.6rem;
-  left: 8rem;
-}
-
-#logs {
-  position: absolute;
-  display: block;
-  text-align: end;
-
-  line-height: 1rem;
-  top: 3rem;
-  left: 3rem;
-
-  visibility: collapse;
-}
-
-.arrow {
-  border: solid black;
-  border-width: 0 5px 5px 0;
-  display: inline-block;
-  padding: 5px;
-}
-
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-}
-
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
 }
 
 /* ===================== Code 1: Global CSS ===================== */

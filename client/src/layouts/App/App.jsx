@@ -2,22 +2,28 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "../Header";
 import Footer from "../Footer";
-import Game from "../../views/Game";
+import GameSection from "../../views/GameSection";
 import Leaderboard from "../../views/Leaderboard";
 import NotFound from "../../views/NotFound";
+
+import ThemeProvider from "../../contexts/ThemeContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Header />
-      <div className="container">
-        <Routes>
-          <Route path="/" element={<Game />} />
-          <Route path="/scoreboard" element={<Leaderboard />} />
-          <Route className="container" path="/*" element={<NotFound />} />
-        </Routes>
-      </div>
-      <Footer />
+      <ThemeProvider>
+        <Header />
+        <main className="container">
+          <div className="main-box">
+            <Routes>
+              <Route path="/" element={<GameSection />} />
+              <Route path="scoreboard" element={<Leaderboard />} />
+              <Route className="container" path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+        </main>
+        <Footer />
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
