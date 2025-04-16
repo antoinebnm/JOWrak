@@ -9,16 +9,13 @@
   padding: 1rem;
   width: 100%;
 
-  background-color: #333;
-  color: #fff;
-}
-
-[data-theme="light"] .banner {
-  background-color: #333;
+  background-color: #f4c890;
+  color: #333;
 }
 
 [data-theme="dark"] .banner {
-  background-color: #bcbcbc;
+  background-color: #2e2e2e;
+  color: #fff;
 }
 
 header.banner {
@@ -29,18 +26,30 @@ header.banner {
   position: relative;
   height: 64px;
   padding: 0;
-  filter: invert(100%);
+  filter: invert(15%);
 }
 
 .banner #homeButton:hover {
+  filter: drop-shadow(0rem 0rem 0.1rem #333);
+}
+
+[data-theme="dark"] .banner #homeButton {
+  filter: invert(100%);
+}
+[data-theme="dark"] .banner #homeButton:hover {
   filter: invert(100%) drop-shadow(0rem 0rem 0.1rem #fff);
 }
 
 #themeSection {
   position: absolute;
   right: 20%;
+  filter: invert(100%);
   color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+[data-theme="dark"] #themeSection {
+  filter: invert(15%);
 }

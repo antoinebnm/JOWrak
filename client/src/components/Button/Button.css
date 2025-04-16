@@ -11,8 +11,12 @@
 
   border: none;
   border-radius: 0.3125rem;
-  background: var(--Electric-Blue, #007bff);
+  background-color: #ffc847;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .btn {
+  background-color: #0064d1;
 }
 
 .btn:hover {
@@ -21,7 +25,16 @@
       rgba(0, 0, 0, 0.1) 0%,
       rgba(0, 0, 0, 0.1) 100%
     ),
-    #007bff;
+    #ffc847;
+}
+
+[data-theme="dark"] .btn:hover {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    #0064d1;
 }
 
 .btn:active {
@@ -30,6 +43,16 @@
       rgba(0, 0, 0, 0.2) 0%,
       rgba(0, 0, 0, 0.2) 100%
     ),
-    #007bff;
+    #ffc847;
+  box-shadow: none;
+}
+
+[data-theme="dark"] .btn:active {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    ),
+    #0064d1;
   box-shadow: none;
 }

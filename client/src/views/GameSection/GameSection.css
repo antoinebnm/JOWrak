@@ -35,11 +35,15 @@
   min-height: 2rem;
   height: fit-content;
 
-  background-color: #d6eaff;
+  background-color: #ffdc8b;
   border: none;
   border-radius: 0.4rem;
 
   cursor: text;
+}
+
+[data-theme="dark"] .input-container #typeBox {
+  background-color: #96b7da;
 }
 
 #typeText {
@@ -59,11 +63,19 @@
 }
 
 .input-container #typeBox:hover {
-  background-color: #bcdcff;
+  background-color: #ffc847;
+}
+
+[data-theme="dark"] .input-container #typeBox:hover {
+  background-color: #689dd7;
 }
 
 .input-container #typeBox:focus {
-  background-color: #bcdcff;
+  background-color: #ffc847;
+}
+
+[data-theme="dark"] .input-container #typeBox:focus {
+  background-color: #689dd7;
 }
 
 #typeText span.incorrect {
