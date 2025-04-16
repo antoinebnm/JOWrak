@@ -6,7 +6,8 @@ import Title from "../../components/Title";
 
 import "./GameSection.css";
 
-const xWords = 2;
+const deltaT = 10;
+const xWords = 10;
 import wordList from "../../components/utils/wordList";
 
 function shuffleWords(array) {
@@ -32,6 +33,7 @@ function buildSpans(sample) {
       spans.push(<span key={`space-${wIdx}`}>&nbsp;</span>);
     }
   });
+
   return spans;
 }
 
@@ -43,7 +45,8 @@ export default function GameSection() {
   const [time, setTime] = useState(0);
   const [typing, setTyping] = useState(false);
 
-  const typeTextRef = useRef(null);
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -53,6 +56,9 @@ export default function GameSection() {
   const initGame = () => {
     const sample = getWordSample(wordList, xWords);
     setSpans(buildSpans(sample));
+    if (containerRef.current) {
+      containerRef.current.scrollLeft = 0;
+    }
     setInput("");
     setCorrect(0);
     setIncorrect(0);
@@ -63,22 +69,22 @@ export default function GameSection() {
 
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
-      setTime((prev) => prev + 1);
-    }, 1000);
+      setTime((prev) => prev + deltaT / 1000);
+    }, deltaT);
   };
 
   const handleKeyDown = (e) => {
-    if (!typing) {
-      setTyping(true);
-      startTimer();
-    }
-
     let key = e.key;
     if (key === " ") key = "\u00A0"; // space match
 
     if (!/^[a-zA-Z]$/.test(key) && key !== "\u00A0" && key !== "Backspace") {
       e.preventDefault();
       return;
+    }
+
+    if (!typing) {
+      setTyping(true);
+      startTimer();
     }
 
     const newInput =
@@ -89,6 +95,15 @@ export default function GameSection() {
         : input;
 
     setInput(newInput);
+
+    if (containerRef.current && textRef.current) {
+      const spans = textRef.current.querySelectorAll("span");
+      const offset = Array.from(spans)
+        .slice(0, newInput.length)
+        .reduce((acc, span) => acc + span.offsetWidth, 0);
+      containerRef.current.scrollLeft =
+        offset - containerRef.current.offsetWidth / 2;
+    }
 
     let correctCount = 0;
     let incorrectCount = 0;
@@ -106,6 +121,7 @@ export default function GameSection() {
     if (newInput.length >= spans.length) {
       clearInterval(intervalRef.current);
       setTyping(false);
+      // endgame here
     }
   };
 
@@ -124,7 +140,7 @@ export default function GameSection() {
         accuracy={accuracy}
         grossWPM={grossWPM.toFixed(2)}
         netWPM={netWPM.toFixed(2)}
-        timer={time}
+        timer={time.toFixed(2)}
       />
 
       {/* Game section */}
@@ -136,7 +152,7 @@ export default function GameSection() {
         <Button
           id="startGameButton"
           className="btn"
-          label="Start Game"
+          label="New word list"
           callback={() => {
             initGame();
           }}
@@ -152,21 +168,21 @@ export default function GameSection() {
       </div>
       <section className="game-info">
         <p>
-          <span id="time">Waiting for the game to start</span>
-        </p>
-        <p>
-          Score: <span id="scoreDiv">0</span>
+          <u>
+            {!typing && !time
+              ? "Click on the box and type to start the game"
+              : time.toFixed(2) + "s"}
+          </u>
         </p>
         <div className="input-container">
-          <span id="label">Type here:</span>
           <div
             id="typeBox"
             tabIndex="1"
             onKeyDown={handleKeyDown}
             className="typeBox"
-            ref={typeTextRef}
+            ref={containerRef}
           >
-            <div id="typeText">
+            <div id="typeText" ref={textRef}>
               {spans.map((span, idx) => {
                 let className = "";
                 if (input.length > idx) {
@@ -177,6 +193,7 @@ export default function GameSection() {
                 } else if (input.length === idx) {
                   className = "current";
                 }
+
                 return (
                   <span key={span.key} className={className}>
                     {span.props.children}
@@ -185,6 +202,7 @@ export default function GameSection() {
               })}
             </div>
           </div>
+          <p>Score: {netWPM.toFixed(1)}</p>
         </div>
       </section>
     </>

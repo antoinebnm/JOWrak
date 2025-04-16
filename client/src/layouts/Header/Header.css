@@ -29,9 +29,10 @@ header.banner {
 }
 
 #themeSection {
+  position: absolute;
+  right: 20%;
   color: #fff;
   display: flex;
-  width: 120px;
   flex-direction: column;
   align-items: center;
 }

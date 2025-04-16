@@ -18,7 +18,8 @@ function App() {
             <Routes>
               <Route path="/" element={<GameSection />} />
               <Route path="scoreboard" element={<Leaderboard />} />
-              <Route className="container" path="*" element={<NotFound />} />
+              <Route path="account" element={<Leaderboard />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </main>

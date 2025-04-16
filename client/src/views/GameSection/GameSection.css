@@ -62,7 +62,7 @@
   background-color: #bcdcff;
 }
 
-.input-container #typeBox:focus.focused {
+.input-container #typeBox:focus {
   background-color: #bcdcff;
 }
 
@@ -80,7 +80,7 @@
   position: relative;
 }
 
-.input-container #typeBox:focus.focused #typeText span.current {
+.input-container #typeBox:focus #typeText span.current {
   border-left: 2px solid black;
   margin-left: -2px;
   animation: 1s ease 0s infinite normal none running cursorBlink;
