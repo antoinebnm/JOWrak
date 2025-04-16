@@ -13,6 +13,14 @@
   color: #fff;
 }
 
+[data-theme="light"] .banner {
+  background-color: #333;
+}
+
+[data-theme="dark"] .banner {
+  background-color: #bcbcbc;
+}
+
 header.banner {
   height: 6rem;
 }

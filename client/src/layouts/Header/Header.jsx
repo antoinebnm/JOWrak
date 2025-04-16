@@ -44,7 +44,7 @@ export default function Header() {
           initialSegment={theme === "light" ? [0, 14] : [14, 28]}
           style={{ filter: "invert(100%)", width: "50px", height: "50px" }}
         />
-        {/*<p>Current theme: {theme}</p>*/}
+        {<p>Current theme: {theme}</p>}
       </section>
       <AuthSection />
     </header>

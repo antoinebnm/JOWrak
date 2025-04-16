@@ -50,6 +50,11 @@ export default function AuthPopup({ type, onClose, onLogin }) {
     setErrors({}); // Clear previous errors
     const action = isRegisterPopup ? "register" : "login";
 
+    if (localStorage.getItem("dev")) {
+      console.log("test");
+      return;
+    }
+
     try {
       let headers = {};
       if (isRegisterPopup) {
