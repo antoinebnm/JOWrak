@@ -13,12 +13,19 @@ export default function AuthPopup({ type, onClose, onLogin }) {
     type.toUpperCase() == "REGISTER"
   );
   const [pwdView, setPwdView] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    displayname: "",
-    password: "",
-    confirmpwd: "",
-  });
+  const [formData, setFormData] = useState(
+    (localStorage.getItem("dev") && {
+      username: "admin",
+      displayname: "",
+      password: "admin",
+      confirmpwd: "",
+    }) || {
+      username: "",
+      displayname: "",
+      password: "",
+      confirmpwd: "",
+    }
+  );
   const [errors, setErrors] = useState({});
 
   function togglePwdSwitchView() {
@@ -47,13 +54,15 @@ export default function AuthPopup({ type, onClose, onLogin }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setErrors({}); // Clear previous errors
-    const action = isRegisterPopup ? "register" : "login";
 
     if (localStorage.getItem("dev")) {
-      console.log("test");
+      console.log("dev submit");
+      onLogin(JSON.parse(localStorage.getItem("user")));
+      onClose();
       return;
     }
+    setErrors({}); // Clear previous errors
+    const action = isRegisterPopup ? "register" : "login";
 
     try {
       let headers = {};

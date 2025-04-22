@@ -8,14 +8,14 @@ import { useUser } from "../../contexts/UserContext";
 import "./AuthSection.css";
 
 function myAccount(element) {
-  if (element.id == "accProfile") window.location.href = "/account?profile";
-  if (element.id == "accSettings") window.location.href = "/account?settings";
+  if (element.id == "accProfile") window.location.href = "/account/profile";
+  if (element.id == "accSettings") window.location.href = "/account/settings";
 }
 
 function userProfil(user, logout) {
   return (
     <div id="accountMenu">
-      <span id="userProfil">{user.displayName}</span>
+      <span id="userProfil">{JSON.parse(user).displayName}</span>
       <div className="dropdown-menu">
         <Button
           id="accProfile"

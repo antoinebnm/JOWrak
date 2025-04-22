@@ -15,12 +15,12 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     const saved = getCookie("user");
-    if (saved) setUser(JSON.parse(saved));
+    if (saved) setUser(saved);
   }, []);
 
   const login = (userData) => {
     setUser(userData);
-    setCookie("user", JSON.stringify(userData), [1, 0, 0, 0]);
+    setCookie("user", userData, [1, 0, 0, 0]);
   };
 
   const logout = () => {
