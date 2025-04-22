@@ -15,7 +15,7 @@ function myAccount(element) {
 function userProfil(user, logout) {
   return (
     <div id="accountMenu">
-      <span id="userProfil">{JSON.parse(user).displayName}</span>
+      <span id="userProfil">{user.displayName}</span>
       <div className="dropdown-menu">
         <Button
           id="accProfile"

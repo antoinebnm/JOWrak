@@ -17,9 +17,13 @@
   justify-content: center;
   align-self: stretch;
 
-  color: #fff;
+  color: #333;
   text-align: center;
   font-size: 1.25rem;
+}
+
+[data-theme="dark"] #accountMenu #userProfil {
+  color: #fff;
 }
 
 .dropdown-menu {
@@ -38,6 +42,10 @@
   border-radius: 4px;
 }
 
+[data-theme="dark"] .dropdown-menu {
+  background-color: #333;
+}
+
 #accountMenu:hover .dropdown-menu {
   opacity: 1;
   transform: translateY(0); /* Menu revient à sa position initiale */
@@ -53,8 +61,8 @@
   align-content: space-between;
   align-self: stretch;
 
-  background: var(--Pure-White, #fff);
-  color: var(--Dark-Gray, #333);
+  background-color: #fff;
+  color: #333;
   text-align: center;
   font-size: 1.25rem;
 
@@ -64,7 +72,11 @@
 }
 
 .dropdown-menu .btn:hover {
-  background: var(--Pale-Blue, #d6eaff);
+  background: #ffdc8b;
+}
+
+[data-theme="dark"] .dropdown-menu .btn:hover {
+  background: #96b7da;
 }
 
 /* Style pour les boutons d'authentification */

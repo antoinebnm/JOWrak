@@ -15,7 +15,7 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     const saved = getCookie("user");
-    if (saved) setUser(saved);
+    if (saved) setUser(JSON.parse(saved));
   }, []);
 
   const login = (userData) => {

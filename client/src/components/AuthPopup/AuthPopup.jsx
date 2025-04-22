@@ -42,6 +42,8 @@ export default function AuthPopup({ type, onClose, onLogin }) {
 
   function Submit() {
     const status = useFormStatus();
+    localStorage.getItem("dev") &&
+      console.log("switch sumbit input to btn & pwdView btn to input/span");
     return (
       <Input
         type="submit"
