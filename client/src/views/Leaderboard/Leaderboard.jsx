@@ -50,8 +50,8 @@ const TableBody = ({ players }) => {
 export default function Leaderboard() {
   const [players, setPlayers] = useState([]);
   const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
+    key: "score",
+    direction: "descending",
   });
 
   useEffect(() => {
@@ -59,8 +59,6 @@ export default function Leaderboard() {
     const fetchScores = async () => {
       try {
         const res = await fetchData("/api/games", undefined, "GET");
-
-        console.log(res);
 
         setPlayers(res);
       } catch (error) {
