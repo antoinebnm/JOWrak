@@ -95,7 +95,7 @@ export default function Leaderboard() {
 
   return (
     <div>
-      <Title text="Top Scores" className="table-title" size="h2" />
+      <Title text="Top Scores" className="tableTitle" size="h2" />
       <table>
         <TableHeader sortConfig={sortConfig} requestSort={requestSort} />
         <TableBody players={sortedPlayers} />

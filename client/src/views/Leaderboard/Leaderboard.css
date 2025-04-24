@@ -1,0 +1,174 @@
+table {
+  display: flex;
+  flex-direction: column;
+
+  height: auto;
+  margin-top: 2rem;
+
+  font-family: "Arial", arial, sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+
+  animation: float 5s infinite;
+}
+
+.tableTitle {
+  color: #333;
+
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 0.1rem;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .tableTitle {
+  color: #fff;
+}
+
+table thead tr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+table thead th {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  padding: 1rem 4rem;
+
+  background: var(--Dark-Gray, #333);
+
+  color: var(--Grayish-White, #f9f9f9);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+table thead th:first-child {
+  border-top-left-radius: 0.25rem;
+}
+
+table thead th:last-child {
+  border-top-right-radius: 0.25rem;
+}
+
+table tbody tr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.125rem;
+}
+
+table tbody td {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 1rem 2rem;
+
+  background: var(--Broke-White, #f4f4f4);
+
+  color: var(--Dark-Gray, #333);
+  font-size: 1.5rem;
+  font-weight: 400;
+
+  width: 100%;
+}
+
+table tbody tr:nth-child(even) td {
+  background: var(--Pale-Blue, #d6eaff);
+}
+
+table tbody tr:hover td {
+  background: #ddd;
+}
+
+.fixed_w {
+  flex: auto;
+  width: 0;
+}
+
+/* ===================== Responsive Design ===================== */
+
+/* Table plus compacte sur tablettes */
+@media (max-width: 1024px) {
+  table {
+    font-size: 24px;
+  }
+
+  .tableTitle {
+    font-size: 2.5rem;
+  }
+
+  table thead th {
+    font-size: 1.8rem;
+    padding: 1rem 3rem;
+  }
+
+  table tbody tr td {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+}
+
+/* Adaptation pour mobiles */
+@media (max-width: 768px) {
+  table {
+    font-size: 18px;
+    flex-direction: column;
+  }
+
+  .tableTitle {
+    font-size: 2rem;
+  }
+
+  table tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  table tbody tr {
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  table tbody tr td {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  /* Ajout d'une pseudo-classe pour afficher le nom de la colonne sur mobile */
+  table tbody tr td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: #555;
+  }
+}
+
+/* Ultra petits écrans */
+@media (max-width: 480px) {
+  .tableTitle {
+    font-size: 1.5rem;
+  }
+
+  table tbody tr td {
+    font-size: 1rem;
+  }
+}
