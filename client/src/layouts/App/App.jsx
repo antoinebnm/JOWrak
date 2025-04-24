@@ -11,18 +11,6 @@ import ThemeProvider from "../../contexts/ThemeContext";
 import UserProvider from "../../contexts/UserContext";
 
 function App() {
-  if (window.location.port == 5173) {
-    sessionStorage.setItem("dev", true);
-    sessionStorage.setItem(
-      "user",
-      JSON.stringify({
-        displayName: "admin",
-        login: "admin",
-        password: "admin",
-      })
-    );
-  }
-
   return (
     <BrowserRouter>
       <UserProvider>
