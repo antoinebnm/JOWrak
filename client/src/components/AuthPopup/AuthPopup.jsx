@@ -13,22 +13,15 @@ export default function AuthPopup({ type, onClose, onLogin }) {
     type.toUpperCase() == "REGISTER"
   );
   const [pwdView, setPwdView] = useState(false);
-  const [formData, setFormData] = useState(
-    (sessionStorage.getItem("dev") && {
-      username: "admin",
-      displayname: "",
-      password: "admin",
-      confirmpwd: "",
-    }) || {
-      username: "",
-      displayname: "",
-      password: "",
-      confirmpwd: "",
-    }
-  );
+  const [formData, setFormData] = useState({
+    username: "",
+    displayname: "",
+    password: "",
+    confirmpwd: "",
+  });
   const [errors, setErrors] = useState({});
 
-  function togglePwdSwitchView() {
+  function togglePwdSwitchView(event) {
     setPwdView(!pwdView);
   }
 
@@ -42,13 +35,11 @@ export default function AuthPopup({ type, onClose, onLogin }) {
 
   function Submit() {
     const status = useFormStatus();
-    sessionStorage.getItem("dev") &&
-      console.log("switch sumbit input to btn & pwdView btn to input/span");
     return (
-      <Input
+      <Button
         type="submit"
         className="btn"
-        value="Submit"
+        label="Submit"
         disabled={status.pending}
       />
     );
@@ -57,12 +48,6 @@ export default function AuthPopup({ type, onClose, onLogin }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (sessionStorage.getItem("dev")) {
-      console.log("dev submit");
-      onLogin(JSON.parse(sessionStorage.getItem("user")));
-      onClose();
-      return;
-    }
     setErrors({}); // Clear previous errors
     const action = isRegisterPopup ? "register" : "login";
 
@@ -194,17 +179,15 @@ export default function AuthPopup({ type, onClose, onLogin }) {
               onChange={(e) => handleInputChange(e)}
               className={errors.creds || errors.password ? "wrong" : ""}
             />
-            <Button
-              label={(pwdView && "O") || "Ø"}
+            <span
               id="pwdEye"
               className="pwdEye"
-              callback={() => {
-                window.addEventListener("click", (event) => {
-                  event.preventDefault();
-                });
+              onClick={() => {
                 togglePwdSwitchView();
               }}
-            />
+            >
+              {(pwdView && "O") || "Ø"}
+            </span>
             {isRegisterPopup && (
               <Input
                 type={pwdView ? "text" : "password"}

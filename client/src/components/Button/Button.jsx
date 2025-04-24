@@ -5,6 +5,7 @@ import "./Button.css";
 export default function Button({
   id,
   label = "Button",
+  type = "button",
   className = "",
   callback = () => {},
 }) {
@@ -15,7 +16,13 @@ export default function Button({
   }
 
   return (
-    <button id={id} ref={ref} className={className} onClick={handleClick}>
+    <button
+      id={id}
+      ref={ref}
+      type={type}
+      className={className}
+      onClick={handleClick}
+    >
       {label}
     </button>
   );
