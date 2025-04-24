@@ -38,9 +38,9 @@ const TableBody = ({ players }) => {
       {players.map((player, index) => (
         <tr key={index}>
           <td>{index + 1}</td>
-          <td>{player.name}</td>
+          <td>{player.playedBy.displayName}</td>
           <td>{player.score}</td>
-          <td>{new Date(player.date).toLocaleDateString()}</td>
+          <td>{formatDate(player.playedAt)}</td>
         </tr>
       ))}
     </tbody>
@@ -55,32 +55,14 @@ export default function Leaderboard() {
   });
 
   useEffect(() => {
-    const devData = [
-      { name: "user1", score: 1, date: formatDate(new Date().getTime()) },
-      {
-        name: "user2",
-        score: 2,
-        date: formatDate(new Date().getTime() - 2 * 24 * 3600 * 1000),
-      },
-      {
-        name: "user3",
-        score: 3,
-        date: formatDate(new Date().getTime() - 24 * 3600 * 1000),
-      },
-    ];
-
     // Fetch player scores from the API
     const fetchScores = async () => {
       try {
-        sessionStorage.getItem("dev") && setPlayers(devData);
-        fetchData("api/games", undefined, "GET", {
-          Authorization: "admin",
-        }).then((data) => {
-          if (data) {
-            if (data.name == "Error") return;
-            setPlayers(data);
-          } else return;
-        });
+        const res = await fetchData("/api/games", undefined, "GET");
+
+        console.log(res);
+
+        setPlayers(res);
       } catch (error) {
         console.error("Error fetching scores:", error);
       }

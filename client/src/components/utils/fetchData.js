@@ -31,7 +31,7 @@ export default async function fetchData(
     }
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-      throw new TypeError("No JSON tranmitted!");
+      throw new TypeError("No JSON transmitted!");
     }
     const json = await response.json();
 

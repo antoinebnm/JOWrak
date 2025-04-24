@@ -21,7 +21,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
   });
   const [errors, setErrors] = useState({});
 
-  function togglePwdSwitchView(event) {
+  function togglePwdSwitchView() {
     setPwdView(!pwdView);
   }
 

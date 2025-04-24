@@ -57,17 +57,9 @@ const limiter = RateLimit({
 // Apply rate limiter to all requests
 app.use(limiter);
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-// Catch-all handler to serve index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-});
-
 const allowedOrigins = [
-  "http://localhost:3000", // Local frontend
-  "", // Production frontend
+  "http://localhost:5173", // Local frontend
+  "http://localhost:3000", // Local server
 ];
 
 app.use(
@@ -108,7 +100,7 @@ app.use(morgan("combined", { stream: latestLogStream }));
 app.use((req, res, next) => {
   // Log user activity
   console.log(
-    `[${new Date().toISOString()}] User '${req.session.user?.displayName}' accessed ${req.method} ${req.originalUrl}`
+    `[${new Date().toISOString()}] User '${req.session.user?.displayName}' accessed ${req.method} ${req.originalUrl} (${req.get("host")})`
   );
 
   // Continue with the request processing
@@ -138,12 +130,11 @@ app.use(
   })
 );
 
-const isAuthorized = require("./middlewares/isAuthorized");
 const apiUsers = require("./api/users");
-app.use("/api/users", isAuthorized, apiUsers);
+app.use("/api/users", apiUsers);
 
 const apiGames = require("./api/games");
-app.use("/api/games", isAuthorized, apiGames);
+app.use("/api/games", apiGames);
 
 const apiAuth = require("./api/auth");
 app.use("/api/auth", apiAuth);
@@ -151,6 +142,14 @@ app.use("/api/auth", apiAuth);
 // DB connection
 const connectDB = require("./middlewares/connectDB");
 connectDB();
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Catch-all handler to serve index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
 
 /**
  * Error Handler
