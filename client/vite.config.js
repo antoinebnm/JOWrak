@@ -13,4 +13,13 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          lottie: ["lottie-web"], // puts it in its own JS file
+        },
+      },
+    },
+  },
 });
