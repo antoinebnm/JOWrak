@@ -14,7 +14,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
   );
   const [pwdView, setPwdView] = useState(false);
   const [formData, setFormData] = useState(
-    (localStorage.getItem("dev") && {
+    (sessionStorage.getItem("dev") && {
       username: "admin",
       displayname: "",
       password: "admin",
@@ -42,7 +42,7 @@ export default function AuthPopup({ type, onClose, onLogin }) {
 
   function Submit() {
     const status = useFormStatus();
-    localStorage.getItem("dev") &&
+    sessionStorage.getItem("dev") &&
       console.log("switch sumbit input to btn & pwdView btn to input/span");
     return (
       <Input
@@ -57,9 +57,9 @@ export default function AuthPopup({ type, onClose, onLogin }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (localStorage.getItem("dev")) {
+    if (sessionStorage.getItem("dev")) {
       console.log("dev submit");
-      onLogin(JSON.parse(localStorage.getItem("user")));
+      onLogin(JSON.parse(sessionStorage.getItem("user")));
       onClose();
       return;
     }

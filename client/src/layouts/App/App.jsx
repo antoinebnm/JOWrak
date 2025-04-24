@@ -12,8 +12,8 @@ import UserProvider from "../../contexts/UserContext";
 
 function App() {
   if (window.location.port == 5173) {
-    localStorage.setItem("dev", true);
-    localStorage.setItem(
+    sessionStorage.setItem("dev", true);
+    sessionStorage.setItem(
       "user",
       JSON.stringify({
         displayName: "admin",
