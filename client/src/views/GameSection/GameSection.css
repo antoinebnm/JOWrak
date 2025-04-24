@@ -4,6 +4,10 @@
   gap: 0.5rem;
 }
 
+.action_btns .btn {
+  padding: 1rem 2rem;
+}
+
 .game-info p {
   margin: 1rem 0;
   font-size: 1.25rem;
