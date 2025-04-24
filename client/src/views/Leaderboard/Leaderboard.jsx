@@ -1,8 +1,13 @@
 import "./Leaderboard.css";
 import Title from "../../components/Title";
 
-// Leaderboard.jsx
 import React, { useEffect, useState } from "react";
+import fetchData from "../../components/utils/fetchData";
+
+function formatDate(date) {
+  let array = new Date(date).toDateString().split(" ");
+  return +array[2] + " " + array[1] + " " + array[3];
+}
 
 // Sub-component for the table header
 const TableHeader = ({ sortConfig, requestSort }) => {
@@ -42,7 +47,6 @@ const TableBody = ({ players }) => {
   );
 };
 
-// Main Leaderboard component
 export default function Leaderboard() {
   const [players, setPlayers] = useState([]);
   const [sortConfig, setSortConfig] = useState({
@@ -51,12 +55,32 @@ export default function Leaderboard() {
   });
 
   useEffect(() => {
+    const devData = [
+      { name: "user1", score: 1, date: formatDate(new Date().getTime()) },
+      {
+        name: "user2",
+        score: 2,
+        date: formatDate(new Date().getTime() - 2 * 24 * 3600 * 1000),
+      },
+      {
+        name: "user3",
+        score: 3,
+        date: formatDate(new Date().getTime() - 24 * 3600 * 1000),
+      },
+    ];
+
     // Fetch player scores from the API
     const fetchScores = async () => {
       try {
-        const response = await fetch("https://api.example.com/scores"); // Replace with your API endpoint
-        const data = await response.json();
-        setPlayers(data);
+        sessionStorage.getItem("dev") && setPlayers(devData);
+        fetchData("api/games", undefined, "GET", {
+          Authorization: "admin",
+        }).then((data) => {
+          if (data) {
+            if (data.name == "Error") return;
+            setPlayers(data);
+          } else return;
+        });
       } catch (error) {
         console.error("Error fetching scores:", error);
       }

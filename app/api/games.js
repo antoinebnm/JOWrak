@@ -8,7 +8,6 @@ api.post("/", async (req, res, next) => {
   if (!req.body?.gameDetails) {
     return res.status(400).json({ error: "No game details found." });
   }
-  console.log("game api called");
   try {
     console.log(req.body.gameDetails);
     // Parse the GameDetails
@@ -23,9 +22,7 @@ api.post("/", async (req, res, next) => {
         .json({ error: "Invalid score: must be an integer" });
     }
 
-    let player;
-    if (_playedBy == "null") player = await User.findById("0".repeat(24));
-    else player = await User.findById(_playedBy);
+    const player = await User.findById(_playedBy);
 
     // Convert `_playedAt` to a Date object
     let playedAt;
