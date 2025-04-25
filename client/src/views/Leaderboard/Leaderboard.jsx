@@ -1,7 +1,7 @@
 import "./Leaderboard.css";
 import Title from "../../components/Title";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import fetchData from "../../components/utils/fetchData";
 
 function formatDate(date) {
@@ -10,18 +10,30 @@ function formatDate(date) {
 }
 
 // Sub-component for the table header
-const TableHeader = ({ sortConfig, requestSort }) => {
+const TableHeader = ({ sortConfig, requestSort, refs }) => {
   return (
     <thead>
       <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th onClick={() => requestSort("score")} style={{ cursor: "pointer" }}>
+        <th style={{ width: "30px" }} ref={(el) => (refs.current[0] = el)}>
+          #
+        </th>
+        <th style={{ width: "250px" }} ref={(el) => (refs.current[1] = el)}>
+          Name
+        </th>
+        <th
+          ref={(el) => (refs.current[2] = el)}
+          onClick={() => requestSort("score")}
+          style={{ width: "180px", cursor: "pointer" }}
+        >
           Score{" "}
           {sortConfig.key === "score" &&
             (sortConfig.direction === "ascending" ? "↑" : "↓")}
         </th>
-        <th onClick={() => requestSort("date")} style={{ cursor: "pointer" }}>
+        <th
+          ref={(el) => (refs.current[3] = el)}
+          onClick={() => requestSort("date")}
+          style={{ width: "250px", cursor: "pointer" }}
+        >
           Date{" "}
           {sortConfig.key === "date" &&
             (sortConfig.direction === "ascending" ? "↑" : "↓")}
@@ -32,15 +44,24 @@ const TableHeader = ({ sortConfig, requestSort }) => {
 };
 
 // Sub-component for the table body
-const TableBody = ({ players }) => {
+const TableBody = ({ players, refs }) => {
+  console.log(refs);
   return (
     <tbody>
       {players.map((player, index) => (
         <tr key={index}>
-          <td>{index + 1}</td>
-          <td>{player.playedBy.displayName}</td>
-          <td>{player.score}</td>
-          <td>{formatDate(player.playedAt)}</td>
+          <td style={{ width: refs.current[0].offsetWidth, display: "block" }}>
+            {index + 1}
+          </td>
+          <td style={{ width: refs.current[1].offsetWidth }}>
+            {player.playedBy.displayName}
+          </td>
+          <td style={{ width: refs.current[2].offsetWidth, display: "block" }}>
+            {player.score}
+          </td>
+          <td style={{ width: refs.current[3].offsetWidth }}>
+            {formatDate(player.playedAt)}
+          </td>
         </tr>
       ))}
     </tbody>
@@ -53,6 +74,7 @@ export default function Leaderboard() {
     key: "score",
     direction: "descending",
   });
+  const sizesRef = useRef([]);
 
   useEffect(() => {
     const fetchScores = async () => {
@@ -96,8 +118,12 @@ export default function Leaderboard() {
     <div>
       <Title text="Top Scores" className="tableTitle" size="h2" />
       <table>
-        <TableHeader sortConfig={sortConfig} requestSort={requestSort} />
-        <TableBody players={sortedPlayers} />
+        <TableHeader
+          refs={sizesRef}
+          sortConfig={sortConfig}
+          requestSort={requestSort}
+        />
+        <TableBody refs={sizesRef} players={sortedPlayers} />
       </table>
     </div>
   );
