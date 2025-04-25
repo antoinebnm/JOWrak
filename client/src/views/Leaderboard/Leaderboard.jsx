@@ -55,11 +55,10 @@ export default function Leaderboard() {
   });
 
   useEffect(() => {
-    // Fetch player scores from the API
     const fetchScores = async () => {
       try {
         const res = await fetchData("/api/games", undefined, "GET");
-
+        if (res.name == "Error") return; // Check if data error, else set players to data
         setPlayers(res);
       } catch (error) {
         console.error("Error fetching scores:", error);
