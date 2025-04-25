@@ -25,7 +25,7 @@ const TableHeader = ({ sortConfig, requestSort, refs }) => {
           onClick={() => requestSort("score")}
           style={{ width: "180px", cursor: "pointer" }}
         >
-          Score{" "}
+          Score
           {sortConfig.key === "score" &&
             (sortConfig.direction === "ascending" ? "↑" : "↓")}
         </th>
@@ -34,7 +34,7 @@ const TableHeader = ({ sortConfig, requestSort, refs }) => {
           onClick={() => requestSort("date")}
           style={{ width: "250px", cursor: "pointer" }}
         >
-          Date{" "}
+          Date
           {sortConfig.key === "date" &&
             (sortConfig.direction === "ascending" ? "↑" : "↓")}
         </th>
@@ -45,7 +45,6 @@ const TableHeader = ({ sortConfig, requestSort, refs }) => {
 
 // Sub-component for the table body
 const TableBody = ({ players, refs }) => {
-  console.log(refs);
   return (
     <tbody>
       {players.map((player, index) => (

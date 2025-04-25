@@ -107,6 +107,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Catch-all handler to serve index.html
+app.get("/:route", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
+
 /**
  * Router Setup
  */
@@ -142,14 +150,6 @@ app.use("/api/auth", apiAuth);
 // DB connection
 const connectDB = require("./middlewares/connectDB");
 connectDB();
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-// Catch-all handler to serve index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-});
 
 /**
  * Error Handler
