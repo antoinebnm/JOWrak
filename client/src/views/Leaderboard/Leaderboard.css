@@ -79,7 +79,7 @@ table tbody td {
 
   padding: 1rem 2rem;
 
-  background: #fde5ad;
+  background: #ffdc8b;
 
   color: #333;
   font-size: 1.5rem;
@@ -94,11 +94,11 @@ table tbody td {
 }
 
 table tbody tr:nth-child(even) td {
-  background: #ffdc8b;
+  background: #ffc847;
 }
 
 [data-theme="dark"] table tbody tr:nth-child(even) td {
-  background-color: #82b6ef;
+  background-color: #689dd7;
 }
 
 table tbody tr:hover td {

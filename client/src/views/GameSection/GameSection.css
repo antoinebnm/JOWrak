@@ -33,8 +33,7 @@
   overflow: hidden;
   outline: none;
 
-  width: auto;
-  min-width: 16.5rem;
+  width: 100%;
   max-width: 24rem;
   min-height: 2rem;
   height: fit-content;
@@ -62,7 +61,7 @@
   min-height: 2rem;
   height: fit-content;
 
-  padding: 1rem;
+  padding: 1rem 0;
   line-height: 1.6;
 }
 

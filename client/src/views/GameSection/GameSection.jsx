@@ -8,6 +8,7 @@ import "./GameSection.css";
 
 const deltaT = 10;
 const xWords = 10;
+let offset = 0;
 import wordList from "../../components/utils/wordList";
 
 function shuffleWords(array) {
@@ -47,6 +48,8 @@ export default function GameSection() {
 
   const containerRef = useRef(null);
   const textRef = useRef(null);
+  const currentCharRef = useRef(null);
+  const lastCharRef = useRef(null);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -56,10 +59,10 @@ export default function GameSection() {
   const initGame = () => {
     const sample = getWordSample(wordList, xWords);
     setSpans(buildSpans(sample));
-    if (containerRef.current) {
-      containerRef.current.scrollLeft = 0;
-    }
     setInput("");
+    offset = containerRef.current.offsetWidth / 2;
+    textRef.current.style = `transform: translateX(${offset}px)`;
+    console.log(offset);
     setCorrect(0);
     setIncorrect(0);
     setTime(0);
@@ -82,7 +85,10 @@ export default function GameSection() {
       return;
     }
 
-    if (!typing) {
+    if (
+      (!typing && input.length == 0 && key !== "Backspace") ||
+      (!typing && input.length > 0 && key === "Backspace")
+    ) {
       setTyping(true);
       startTimer();
     }
@@ -96,14 +102,15 @@ export default function GameSection() {
 
     setInput(newInput);
 
-    if (containerRef.current && textRef.current) {
-      const spans = textRef.current.querySelectorAll("span");
-      const offset = Array.from(spans)
-        .slice(0, newInput.length)
-        .reduce((acc, span) => acc + span.offsetWidth, 0);
-      containerRef.current.scrollLeft =
-        offset - containerRef.current.offsetWidth / 2;
+    if (key === "Backspace") {
+      if (currentCharRef.current != null)
+        offset += currentCharRef.current.previousElementSibling.offsetWidth;
+      else offset += lastCharRef.current.offsetWidth;
+    } else {
+      offset -= currentCharRef.current.offsetWidth - 2; // -2 fixes 2px disapearing issue
     }
+
+    textRef.current.style = `transform: translateX(${offset}px)`;
 
     let correctCount = 0;
     let incorrectCount = 0;
@@ -195,7 +202,11 @@ export default function GameSection() {
                 }
 
                 return (
-                  <span key={span.key} className={className}>
+                  <span
+                    key={span.key}
+                    className={className}
+                    ref={className == "current" ? currentCharRef : lastCharRef}
+                  >
                     {span.props.children}
                   </span>
                 );

@@ -9,6 +9,36 @@ function formatDate(date) {
   return +array[2] + " " + array[1] + " " + array[3];
 }
 
+/**
+ * Get the personal best game entry for each user.
+ * @param {Array} data - The array of game entries (scoreboard).
+ * @returns {Array} - Array of highest score entries per user.
+ */
+function getPersonalBests(data) {
+  const bestByUser = new Map();
+
+  data.forEach((entry) => {
+    const userId = entry.playedBy._id;
+
+    if (!bestByUser.has(userId)) {
+      bestByUser.set(userId, entry);
+    } else {
+      const currentBest = bestByUser.get(userId);
+
+      // If score is higher, or same score but more recent date
+      if (
+        entry.score > currentBest.score ||
+        (entry.score === currentBest.score &&
+          new Date(entry.playedAt) > new Date(currentBest.playedAt))
+      ) {
+        bestByUser.set(userId, entry);
+      }
+    }
+  });
+
+  return Array.from(bestByUser.values());
+}
+
 // Sub-component for the table header
 const TableHeader = ({ sortConfig, requestSort, refs }) => {
   return (
@@ -31,11 +61,11 @@ const TableHeader = ({ sortConfig, requestSort, refs }) => {
         </th>
         <th
           ref={(el) => (refs.current[3] = el)}
-          onClick={() => requestSort("date")}
+          onClick={() => requestSort("playedAt")}
           style={{ width: "250px", cursor: "pointer" }}
         >
           Date
-          {sortConfig.key === "date" &&
+          {sortConfig.key === "playedAt" &&
             (sortConfig.direction === "ascending" ? "↑" : "↓")}
         </th>
       </tr>
@@ -44,22 +74,22 @@ const TableHeader = ({ sortConfig, requestSort, refs }) => {
 };
 
 // Sub-component for the table body
-const TableBody = ({ players, refs }) => {
+const TableBody = ({ games, refs }) => {
   return (
     <tbody>
-      {players.map((player, index) => (
+      {games.map((game, index) => (
         <tr key={index}>
           <td style={{ width: refs.current[0].offsetWidth, display: "block" }}>
             {index + 1}
           </td>
           <td style={{ width: refs.current[1].offsetWidth }}>
-            {player.playedBy.displayName}
+            {game.playedBy.displayName}
           </td>
           <td style={{ width: refs.current[2].offsetWidth, display: "block" }}>
-            {player.score}
+            {game.score}
           </td>
           <td style={{ width: refs.current[3].offsetWidth }}>
-            {formatDate(player.playedAt)}
+            {formatDate(game.playedAt)}
           </td>
         </tr>
       ))}
@@ -68,7 +98,7 @@ const TableBody = ({ players, refs }) => {
 };
 
 export default function Leaderboard() {
-  const [players, setPlayers] = useState([]);
+  const [games, setGames] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: "score",
     direction: "descending",
@@ -79,8 +109,9 @@ export default function Leaderboard() {
     const fetchScores = async () => {
       try {
         const res = await fetchData("/api/games", undefined, "GET");
-        if (res.name == "Error") return; // Check if data error, else set players to data
-        setPlayers(res);
+        if (res.name == "Error") return; // Check if data error, else set games to data
+
+        setGames(getPersonalBests(res));
       } catch (error) {
         console.error("Error fetching scores:", error);
       }
@@ -97,10 +128,10 @@ export default function Leaderboard() {
     setSortConfig({ key, direction });
   };
 
-  const sortedPlayers = React.useMemo(() => {
-    let sortablePlayers = [...players];
+  const sortedGames = React.useMemo(() => {
+    let sortableGames = [...games];
     if (sortConfig.key !== null) {
-      sortablePlayers.sort((a, b) => {
+      sortableGames.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
           return sortConfig.direction === "ascending" ? -1 : 1;
         }
@@ -110,8 +141,8 @@ export default function Leaderboard() {
         return 0;
       });
     }
-    return sortablePlayers;
-  }, [players, sortConfig]);
+    return sortableGames;
+  }, [games, sortConfig]);
 
   return (
     <div>
@@ -122,7 +153,7 @@ export default function Leaderboard() {
           sortConfig={sortConfig}
           requestSort={requestSort}
         />
-        <TableBody refs={sizesRef} players={sortedPlayers} />
+        <TableBody refs={sizesRef} games={sortedGames} />
       </table>
     </div>
   );

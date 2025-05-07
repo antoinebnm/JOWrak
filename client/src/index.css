@@ -31,6 +31,7 @@ body[data-theme="dark"] {
   height: auto;
   max-width: 75rem;
   padding: 4.5rem;
+  margin: 10% 0;
 
   flex-direction: column;
   justify-content: flex-start;
