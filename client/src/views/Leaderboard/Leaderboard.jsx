@@ -138,6 +138,11 @@ export default function Leaderboard() {
         if (a[sortConfig.key] > b[sortConfig.key]) {
           return sortConfig.direction === "ascending" ? 1 : -1;
         }
+        // Date égale: tri par meilleur score
+        // Score égal: tri par plus ancien
+        if (a[sortConfig.key] == b[sortConfig.key]) {
+          return b[sortConfig.direction] === "ascending" ? 1 : -1;
+        }
         return 0;
       });
     }
