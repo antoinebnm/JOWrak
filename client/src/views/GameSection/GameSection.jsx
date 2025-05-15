@@ -129,6 +129,7 @@ export default function GameSection() {
       clearInterval(intervalRef.current);
       setTyping(false);
       // endgame here
+      containerRef.current.blur();
     }
   };
 
