@@ -6,6 +6,8 @@ import Input from "../Input";
 import Title from "../Title";
 
 import "./AuthPopup.css";
+import { getCookie } from "../utils/cookieAgent";
+import saveGame from "../utils/saveGame";
 
 export default function AuthPopup({ type, onClose, onLogin }) {
   const popupRef = useRef(null);
@@ -96,15 +98,16 @@ export default function AuthPopup({ type, onClose, onLogin }) {
         });
 
         onClose();
+        console.log(data);
 
-        // Handle game saving if applicable
-        // const gameDetails = JSON.parse(document.cookie.replace(/(?:(?:^|.*;\s*)gameDetails\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
-        // if (gameDetails) {
-        //   gameDetails["playedBy"] = data.user.userId;
-        //   await saveGame(gameDetails);
-        //   document.cookie = "gameDetails=; path=/; max-age=0"; // Clear gameDetails cookie
-        //   alert("Successfully saved the game");
-        // }
+        // Handle game save if applicable (game played with no user logged in)
+        const gameDetails = JSON.parse(getCookie("gameDetails"));
+        if (gameDetails) {
+          gameDetails["playedBy"] = data.user.userId;
+          await saveGame(gameDetails);
+          document.cookie = "gameDetails=; path=/; max-age=0"; // Clear gameDetails cookie
+          alert("Successfully saved the game");
+        }
       }
     } catch (error) {
       const newErrors = {};
