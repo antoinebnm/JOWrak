@@ -98,7 +98,6 @@ export default function AuthPopup({ type, onClose, onLogin }) {
         });
 
         onClose();
-        console.log(data);
 
         // Handle game save if applicable (game played with no user logged in)
         const gameDetails = JSON.parse(getCookie("gameDetails"));

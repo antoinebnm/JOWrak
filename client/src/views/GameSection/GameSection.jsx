@@ -11,7 +11,7 @@ const xWords = 10;
 let offset = 0;
 import wordList from "../../components/utils/wordList";
 import { useUser } from "../../contexts/UserContext";
-import { setCookie } from "../../components/utils/cookieAgent";
+import { getCookie, setCookie } from "../../components/utils/cookieAgent";
 import saveGame from "../../components/utils/saveGame";
 
 function shuffleWords(array) {
@@ -231,6 +231,16 @@ export default function GameSection() {
             </div>
           </div>
           <p>Score: {netWPM.toFixed(1)}</p>
+        </div>
+        <div hidden={!getCookie("gameDetails")}>
+          <p>
+            {">"} Log in to save the game {"<"}
+          </p>
+          <p>
+            Previous score:{" "}
+            {!!getCookie("gameDetails") &&
+              JSON.parse(getCookie("gameDetails")).score}
+          </p>
         </div>
       </section>
     </>
