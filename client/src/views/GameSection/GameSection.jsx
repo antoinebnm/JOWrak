@@ -10,6 +10,9 @@ const deltaT = 10;
 const xWords = 10;
 let offset = 0;
 import wordList from "../../components/utils/wordList";
+import { useUser } from "../../contexts/UserContext";
+import { setCookie } from "../../components/utils/cookieAgent";
+import saveGame from "../../components/utils/saveGame";
 
 function shuffleWords(array) {
   const newArr = [...array];
@@ -45,6 +48,7 @@ export default function GameSection() {
   const [incorrect, setIncorrect] = useState(0);
   const [time, setTime] = useState(0);
   const [typing, setTyping] = useState(false);
+  const { user } = useUser();
 
   const containerRef = useRef(null);
   const textRef = useRef(null);
@@ -62,7 +66,7 @@ export default function GameSection() {
     setInput("");
     offset = containerRef.current.offsetWidth / 2;
     textRef.current.style = `transform: translateX(${offset}px)`;
-    console.log(offset);
+    //console.log(offset);
     setCorrect(0);
     setIncorrect(0);
     setTime(0);
@@ -128,8 +132,20 @@ export default function GameSection() {
     if (newInput.length >= spans.length) {
       clearInterval(intervalRef.current);
       setTyping(false);
-      // endgame here
       containerRef.current.blur();
+
+      const gameInfo = {
+        type: "typeSpeed",
+        score: netWPM.toFixed(1),
+        playedAt: new Date(),
+      };
+
+      if (user) {
+        gameInfo["playedBy"] = user.userId;
+        saveGame(gameInfo);
+      } else {
+        setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
+      }
     }
   };
 
