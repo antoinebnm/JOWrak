@@ -60,6 +60,7 @@ app.use(limiter);
 const allowedOrigins = [
   "http://localhost:5173", // Local frontend
   "http://localhost:3000", // Local server
+  "https://overly-charmed-grubworm.ngrok-free.app", // ngrok static domain
 ];
 
 app.use(
