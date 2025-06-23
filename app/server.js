@@ -108,19 +108,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../client/dist")));
+// // Serve static files from the React app
+// app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// Catch-all handler to serve index.html
-app.get("/:route", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
-});
+// // Catch-all handler to serve index.html
+// app.get("/:route?", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+// });
 
 /**
  * Router Setup
  */
-const router = require("./router/routes");
-app.use("/", router);
+// const router = require("./router/routes");
+// app.use("/", router);
 
 app.disable("x-powered-by");
 // Add helmet to the middleware chain.
@@ -147,6 +147,9 @@ app.use("/api/games", apiGames);
 
 const apiAuth = require("./api/auth");
 app.use("/api/auth", apiAuth);
+
+const apiJwt = require("./api/jwt");
+app.use("/api/jwt", apiJwt);
 
 // DB connection
 const connectDB = require("./middlewares/connectDB");

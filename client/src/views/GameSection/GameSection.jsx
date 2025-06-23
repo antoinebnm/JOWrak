@@ -11,9 +11,14 @@ const xWords = 10;
 let offset = 0;
 import wordList from "../../components/utils/wordList";
 import { useUser } from "../../contexts/UserContext";
-import { getCookie, setCookie } from "../../components/utils/cookieAgent";
 import saveGame from "../../components/utils/saveGame";
+import fetchData from "../../components/utils/fetchData";
 
+/**
+ * Mélange aléatoirement les mots dans un tableau (algorithme de Fisher–Yates)
+ * @param {object} array
+ * @returns {object}
+ */
 function shuffleWords(array) {
   const newArr = [...array];
   for (let i = newArr.length - 1; i > 0; i--) {
@@ -23,10 +28,13 @@ function shuffleWords(array) {
   return newArr;
 }
 
+// Récupère un échantillon aléatoire de `count` mots depuis la wordList
 function getWordSample(words, count) {
   return shuffleWords(words).slice(0, count);
 }
 
+// Génère un tableau de <span> React pour chaque caractère des mots donnés
+// Afficher et checker chaque caractère individuellement
 function buildSpans(sample) {
   const spans = [];
   sample.forEach((word, wIdx) => {
@@ -56,10 +64,12 @@ export default function GameSection() {
   const lastCharRef = useRef(null);
   const intervalRef = useRef(null);
 
+  // Initialise le jeu au montage du composant
   useEffect(() => {
     initGame();
   }, []);
 
+  // Initialise un nouveau jeu : réinitialise l'état, recentre le texte et arrête les timers
   const initGame = () => {
     const sample = getWordSample(wordList, xWords);
     setSpans(buildSpans(sample));
@@ -74,18 +84,24 @@ export default function GameSection() {
     clearInterval(intervalRef.current);
   };
 
+  // Démarre le timer principal (appelé à chaque frappe de touche)
   const startTimer = () => {
     intervalRef.current = setInterval(() => {
       setTime((prev) => prev + deltaT / 1000);
     }, deltaT);
   };
 
+  // Gère la frappe clavier :
+  // - met à jour le texte tapé
+  // - ajuste l'offset horizontal
+  // - met à jour les stats (correct/incorrect)
+  // - déclenche la sauvegarde si tout est tapé
   const handleKeyDown = (e) => {
     let key = e.key;
     if (key === " ") key = "\u00A0"; // space match
+    e.preventDefault();
 
     if (!/^[a-zA-Z]$/.test(key) && key !== "\u00A0" && key !== "Backspace") {
-      e.preventDefault();
       return;
     }
 
@@ -97,6 +113,7 @@ export default function GameSection() {
       startTimer();
     }
 
+    // Ajustement de l'offset horizontal (décalage gauche/droite selon la touche)
     const newInput =
       key === "Backspace"
         ? input.slice(0, -1)
@@ -144,17 +161,24 @@ export default function GameSection() {
         gameInfo["playedBy"] = user.userId;
         saveGame(gameInfo);
       } else {
-        setCookie("gameDetails", gameInfo, [0, 1, 0, 0]);
+        fetchData("/api/jwt/sign", JSON.stringify(gameInfo))
+          .then((token) => {
+            console.log(token);
+            sessionStorage.setItem("gameDetails", token);
+          })
+          .catch((e) => console.error(e));
       }
     }
   };
 
+  // Calculs de statistiques en temps réel
   const accuracy = input.length > 0 ? correct / input.length : 0;
   const grossWPM = time > 0 ? input.length / 5 / (time / 60) : 0;
   const netWPM = grossWPM * accuracy;
 
   return (
     <>
+      {/* logging des stats du jeu */}
       <GameLogger
         totalWords={xWords}
         totalChars={spans.length}
@@ -166,7 +190,6 @@ export default function GameSection() {
         netWPM={netWPM.toFixed(2)}
         timer={time.toFixed(2)}
       />
-
       {/* Game section */}
       <Title text="Typing Speed Game" size="h2" />
       <p className="game-description">
@@ -232,14 +255,14 @@ export default function GameSection() {
           </div>
           <p>Score: {netWPM.toFixed(1)}</p>
         </div>
-        <div hidden={!getCookie("gameDetails")}>
+        <div hidden={!sessionStorage.getItem("gameDetails")}>
           <p>
             {">"} Log in to save the game {"<"}
           </p>
           <p>
             Previous score:{" "}
-            {!!getCookie("gameDetails") &&
-              JSON.parse(getCookie("gameDetails")).score}
+            {!!sessionStorage.getItem("gameDetails") &&
+              JSON.stringify(sessionStorage.getItem("gameDetails")).score}
           </p>
         </div>
       </section>

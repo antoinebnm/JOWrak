@@ -9,13 +9,13 @@ api.post("/", async (req, res, next) => {
     return res.status(400).json({ error: "No game details found." });
   }
   try {
-    console.log(req.body.gameDetails);
+    //console.log(req.body.gameDetails);
     // Parse the GameDetails
     const { _type, _score, _playedBy, _playedAt } = req.body.gameDetails;
 
     // Convert `_score` to an integer
     const score = parseInt(_score, 10);
-    console.log(score);
+    //console.log(score);
     if (isNaN(score)) {
       return res
         .status(400)

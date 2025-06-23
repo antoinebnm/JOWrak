@@ -12,7 +12,7 @@ router.get("/scoreboard", (req, res, next) => {
   res.sendFile(path.join(__dirname, "../static/scoreboard.html"));
 });
 
-router.get("/account", (req, res, next) => {
+router.get("/account?", (req, res, next) => {
   res.sendFile(path.join(__dirname, "../static/account.html"));
 });
 
