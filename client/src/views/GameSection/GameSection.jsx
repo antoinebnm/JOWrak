@@ -99,7 +99,7 @@ export default function GameSection() {
   const handleKeyDown = (e) => {
     let key = e.key;
     if (key === " ") key = "\u00A0"; // space match
-    e.preventDefault();
+    if (!/^[A-Za-z]{1}$/.test(key)) e.preventDefault();
 
     if (!/^[a-zA-Z]$/.test(key) && key !== "\u00A0" && key !== "Backspace") {
       return;
