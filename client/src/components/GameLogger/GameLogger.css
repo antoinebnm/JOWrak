@@ -1,7 +1,8 @@
 #logs_arrow {
   position: absolute;
-  top: 1.6rem;
-  left: 8rem;
+  display: block;
+  top: 6rem;
+  left: 2rem;
 }
 
 #logs {
@@ -10,7 +11,7 @@
   text-align: end;
 
   line-height: 1rem;
-  top: 3rem;
+  top: 8rem;
   left: 3rem;
 }
 
